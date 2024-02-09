@@ -6,12 +6,15 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @ToString
 @Table(name = "t_article_comment",
@@ -20,7 +23,6 @@ import java.util.Objects;
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
         })
-@Entity
 public class ArticleComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
