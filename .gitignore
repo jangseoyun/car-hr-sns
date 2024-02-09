@@ -175,3 +175,5 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+#application
+application-local.yml
