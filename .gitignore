@@ -178,4 +178,5 @@ gradle-app.setting
 #application
 application-local.yml
 
-src/main/generated
+# queryDSL
+/src/main/generated
