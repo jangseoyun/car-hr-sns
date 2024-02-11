@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Table(name = "t_article",
         indexes = {
                 @Index(columnList = "title"),
@@ -40,19 +40,24 @@ public class Article extends AuditingFields{
     private String hashtag;
 
     @ToString.Exclude
-    @OrderBy("id")
+    @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article",
                 cascade = CascadeType.ALL)
     private Set<ArticleComment> articleComment = new HashSet<>();
 
-    private Article(String title, String content, String hashtag) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
+
+    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        return new Article(userAccount, title, content, hashtag);
     }
 
     @Override

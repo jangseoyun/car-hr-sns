@@ -2,18 +2,16 @@ package com.car.sns.service;
 
 import com.car.sns.domain.Article;
 import com.car.sns.domain.ArticleComment;
-import com.car.sns.domain.ArticleCommentDto;
+import com.car.sns.dto.ArticleCommentDto;
 import com.car.sns.repository.ArticleCommentRepository;
 import com.car.sns.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,10 +35,9 @@ class ArticleCommentServiceTest {
     void givenArticleId_whenSearchingArticleComments_thenArticleComments() {
         //given
         Long articleId = 1L;
-        Article article = Article.of("title", "content", "hashtag");
 
         given(articleRepository.findById(articleId))
-                .willReturn(Optional.of(article));
+                .willReturn(Optional.of(any(Article.class)));
 
         //when
         List<ArticleCommentDto> articleComments = sut.searchArticleComment(articleId);
