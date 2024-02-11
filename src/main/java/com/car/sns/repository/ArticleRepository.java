@@ -4,17 +4,26 @@ import com.car.sns.domain.Article;
 import com.car.sns.domain.QArticle;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.nio.channels.FileChannel;
+
 @RepositoryRestResource
-public interface ArticleRepository extends
-        JpaRepository<Article, Long>
+public interface ArticleRepository extends JpaRepository<Article, Long>
         , QuerydslPredicateExecutor<Article>
         , QuerydslBinderCustomizer<QArticle> {
+
+    Page<Article> findByTitleContaining(String title, Pageable pageable);
+    Page<Article> findByContentContaining(String content, Pageable pageable);
+    Page<Article> findByHashtag(String hashtag, Pageable pageable);
+    Page<Article> findByUserAccount_UserIdContaining(String content, Pageable pageable);
+    Page<Article> findByUserAccount_NicknameContaining(String content, Pageable pageable);
 
     @Override
     default void customize(QuerydslBindings bindings, QArticle root) {
@@ -26,6 +35,5 @@ public interface ArticleRepository extends
         bindings.bind(root.hashtag).first(StringExpression::likeIgnoreCase);
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);
         bindings.bind(root.createdBy).first(StringExpression::likeIgnoreCase);
-
-    };
+    }
 }
