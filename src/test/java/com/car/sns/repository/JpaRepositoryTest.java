@@ -2,6 +2,7 @@ package com.car.sns.repository;
 
 import com.car.sns.config.JpaConfig;
 import com.car.sns.domain.Article;
+import com.car.sns.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,10 @@ class JpaRepositoryTest {
     @Test
     @DisplayName("insert test")
     void givenTestData_whenInserting_thenWorksFine() {
+        UserAccount userAccount = UserAccount.of("user id", "password", "email@naver.com", "nickname", null);
 
         long previousCount = articleRepository.count();
-        Article article = Article.of("new title", "new content", "hashtag");
+        Article article = Article.of(userAccount,"new title", "new content", "hashtag");
 
         Article savedArticle = articleRepository.save(article);
 

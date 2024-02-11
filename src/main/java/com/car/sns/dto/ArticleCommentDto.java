@@ -1,6 +1,7 @@
-package com.car.sns.domain;
+package com.car.sns.dto;
 
-import java.io.Serializable;
+import com.car.sns.domain.ArticleComment;
+
 import java.time.LocalDateTime;
 
 /**

@@ -1,7 +1,6 @@
 package com.car.sns.service;
 
-import com.car.sns.domain.ArticleComment;
-import com.car.sns.domain.ArticleCommentDto;
+import com.car.sns.dto.ArticleCommentDto;
 import com.car.sns.repository.ArticleCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
