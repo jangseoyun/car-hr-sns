@@ -180,3 +180,6 @@ application-local.yml
 
 # queryDSL
 /src/main/generated
+
+# JPA Buddy
+.jpb/
