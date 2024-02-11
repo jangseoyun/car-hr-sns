@@ -12,17 +12,21 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString(callSuper = true)
-@Table(name = "t_user_account")
+@Table(name = "t_user_account",
+        indexes = {
+                @Index(columnList = "email", unique = true),
+                @Index(columnList = "createdAt"),
+                @Index(columnList = "createdBy")
+})
 public class UserAccount extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_account_id")
-    private Long id;
+    private Long userAccountId;
 
     @Column(name = "user_id"
-            , length = 50
-            , nullable = false)
+    , length = 50)
     private String userId;
 
     @Column(name = "user_password"
@@ -58,11 +62,11 @@ public class UserAccount extends AuditingFields {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserAccount that)) return false;
-        return Objects.equals(id, that.id);
+        return Objects.equals(userAccountId, that.userAccountId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(userAccountId);
     }
 }
