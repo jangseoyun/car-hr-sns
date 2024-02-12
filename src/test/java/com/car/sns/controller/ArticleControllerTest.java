@@ -57,7 +57,6 @@ class ArticleControllerTest {
         then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
     }
 
-    @Disabled("구현 중")
     @Test
     @DisplayName("[view] read - 게시글 상세 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleDetail() throws Exception {
