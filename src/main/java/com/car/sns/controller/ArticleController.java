@@ -47,7 +47,7 @@ public class ArticleController {
 
         Page<ArticleResponse> articleResponses = articleService.searchArticles(searchType, searchKeyword, pageable).map(ArticleResponse::from);
         map.addAttribute("articles", articleResponses);
-        log.info("article response: ", articleResponses);
+        log.info("article response: {}", articleResponses);
         return "features-posts";
     }
 
@@ -56,6 +56,7 @@ public class ArticleController {
         ArticleDto articleDto = articleService.getArticle(articleId);
         map.addAttribute("articleDetail", ArticleResponse.from(articleDto));
         //TODO: 게시글 관련 댓글도 함께 조회가능하도록 구현
-        return "features-posts";
+        log.info("detail response: {}", ArticleResponse.from(articleDto));
+        return "features-posts-detail";
     }
 }
