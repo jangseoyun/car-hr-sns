@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<thlogic>
+    <attr sel="#header" th:replace="header :: header"></attr>
+    <attr sel="#footer" th:replace="footer :: footer"></attr>
+
+    <attr sel="tbody" th:remove="all-but-first">
+        <attr sel="tr[0]" th:each="article : ${articles}">
+            <attr sel="td.title" th:text="${article.title}"/>
+            <attr sel="td.nickname" th:text="${article.nickname}"/>
+            <attr sel="td.created-at" th:text="${article.createdAt}"/>
+            <attr sel="td.hashtag" th:text="${article.hashtag}"/>
+        </attr>
+    </attr>
+</thlogic>
