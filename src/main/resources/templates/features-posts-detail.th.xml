@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<thlogic>
+    <attr sel="#header" th:replace="header :: header"></attr>
+    <attr sel="#footer" th:replace="footer :: footer"></attr>
+
+    <attr sel=".section-body" th:object="${articleDetail}">
+        <attr sel=".section-title" th:text="${articleDetail.title}"></attr>
+        <attr sel="#post-content/p" th:text="${articleDetail.content}"></attr>
+    </attr>
+</thlogic>
