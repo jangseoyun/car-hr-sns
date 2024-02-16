@@ -44,6 +44,16 @@ class ArticleControllerTest {
     }
 
     @Test
+    @DisplayName("[view] read - 게시글 작성 페이지 - 정상 호출")
+    void givenNothing_whenRequestingCreateView_thenReturnArticleCreateView() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/articles/create"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
+                .andExpect(view().name("features-post-create"));
+    }
+
+    @Test
     @DisplayName("[view] read - 게시글 리스트 (게시판) 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleView() throws Exception {
         BDDMockito.given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
