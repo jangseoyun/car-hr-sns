@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<thlogic>
+    <attr sel="#sidebar-community">
+        <attr sel=".dropdown-menu">
+            <attr sel=".post-create-link" th:href="@{/articles/create}"></attr>
+            <attr sel=".post-link" th:href="@{/articles/index}"></attr>
+            <attr sel=".post-detail-link" th:href="@{/articles/detail/1}"></attr>
+        </attr>
+    </attr>
+</thlogic>

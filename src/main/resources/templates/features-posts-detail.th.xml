@@ -5,6 +5,12 @@
 
     <attr sel=".section-body" th:object="${articleDetail}">
         <attr sel=".section-title" th:text="${articleDetail.title}"></attr>
+        <attr sel=".section-lead" th:text="${articleDetail.hashtag}"></attr>
         <attr sel="#post-content/p" th:text="${articleDetail.content}"></attr>
+    </attr>
+    <attr sel="#comment-line" th:each="comment : ${articleDetail.articleCommentDtos}">
+        <attr sel=".comment-content" th:text="${comment.content}">
+            <attr sel=".commmenter-name" th:text="${comment.createdBy}"></attr>
+        </attr>
     </attr>
 </thlogic>
