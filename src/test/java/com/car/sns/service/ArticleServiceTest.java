@@ -6,6 +6,7 @@ import com.car.sns.domain.type.SearchType;
 import com.car.sns.dto.ArticleDto;
 import com.car.sns.dto.ArticleModifyDto;
 import com.car.sns.repository.ArticleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.*;
 
 @DisplayName("비즈니스 로직 - 게시글")
@@ -117,6 +119,25 @@ class ArticleServiceTest {
                 .save(any(Article.class));
     }
 
+    @DisplayName("[게시글 단건 조회] - 게시글이 존재하지 않는 경우 예외 발생")
+    @Test
+    void givenNonexistentArticleId_whenSearchingArticle_thenThrowsException() {
+        //given
+        Long articleId = 0L;
+        given(articleRepository.findById(articleId))
+                .willReturn(Optional.empty());
+
+        //when
+        Throwable throwable = catchThrowable(() -> sut.getArticle(articleId));
+
+        //then
+        assertThat(throwable)
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("게시글이 존재하지 않습니다: - articleId: " + articleId);
+
+        then(articleRepository).should().findById(articleId);
+    }
+
     @Test
     void givenArticleIdAndModifiedInfo_whenUpdatingArticle_thenUpdateArticle() {
         //given
@@ -132,6 +153,25 @@ class ArticleServiceTest {
                 .save(any(Article.class));
     }
 
+    @DisplayName("게시글의 ID를 입력하면 게시글을 삭제한다")
+    @Test
+    void givenArticleId_whenDeletingArticle_thenDeleteArticle() {
+        Long articleId = 1L;
+
+        //given
+        willDoNothing()
+                .given(articleRepository)
+                .deleteById(articleId);
+
+        //when
+        sut.deleteArticle(articleId);
+
+        //then
+        then(articleRepository)
+                .should()
+                .deleteById(articleId);
+    }
+
     private Article createdArticle() {
         UserAccount userAccount = createdUserAccount();
         return Article.of(userAccount, "title", "content", "hashtag");
@@ -144,26 +184,5 @@ class ArticleServiceTest {
     private ArticleDto createdArticleDto(Article article) {
         return ArticleDto.from(article);
     }
-
-    /* @DisplayName("게시글의 ID와 수정 정보를 입력하면, 게시글을 수정한다")
-
-
-    @DisplayName("게시글의 ID를 입력하면 게시글을 삭제한다")
-    @Test
-    void givenArticleId_whenDeletingArticle_thenDeleteArticle() {
-        //given
-        willDoNothing()
-                .given(articleRepository)
-                .delete(any(Article.class));
-
-        //when
-        sut.deleteArticle(1L);
-
-        //then
-        //save method가 호출되었는지 확인하는 것
-        then(articleRepository)
-                .should()
-                .delete(any(Article.class));
-    }*/
 
 }

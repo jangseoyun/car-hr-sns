@@ -6,6 +6,7 @@ import com.car.sns.domain.UserAccount;
 import com.car.sns.dto.ArticleDto;
 import com.car.sns.dto.UserAccountDto;
 import com.car.sns.service.ArticleService;
+import com.car.sns.service.PaginationService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.nio.file.Paths.get;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,13 +41,15 @@ class ArticleControllerTest {
 
     @MockBean
     private ArticleService articleService;
+    @MockBean
+    private PaginationService paginationService;
 
     public ArticleControllerTest(@Autowired MockMvc mockMvc) {
         this.mockMvc = mockMvc;
     }
 
     @Test
-    @DisplayName("[view] read - 게시글 작성 페이지 - 정상 호출")
+    @DisplayName("[view] write - 게시글 작성 페이지 - 정상 호출")
     void givenNothing_whenRequestingCreateView_thenReturnArticleCreateView() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/create"))
@@ -56,15 +61,18 @@ class ArticleControllerTest {
     @Test
     @DisplayName("[view] read - 게시글 리스트 (게시판) 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleView() throws Exception {
-        BDDMockito.given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/index"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-                .andExpect(view().name("index"))
-                .andExpect(model().attributeExists("articles"));
+                .andExpect(view().name("features-posts"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("paginationBarNumbers"));
 
         then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
     @Test
