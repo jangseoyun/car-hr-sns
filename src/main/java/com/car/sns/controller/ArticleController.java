@@ -6,6 +6,7 @@ import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.response.ArticleResponse;
 import com.car.sns.dto.response.ArticleWithCommentsResponse;
 import com.car.sns.service.ArticleService;
+import com.car.sns.service.PaginationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,10 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +26,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final PaginationService paginationService;
 
     @GetMapping("/")
     public String index() {
@@ -50,7 +49,11 @@ public class ArticleController {
 
         Page<ArticleResponse> articleResponses = articleService.searchArticles(searchType, searchKeyword, pageable)
                 .map(ArticleResponse::from);
+        List<Integer> paginationBarNumber = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
+
         map.addAttribute("articles", articleResponses);
+        map.addAttribute("paginationBarNumbers", paginationBarNumber);
+
         log.info("article response: {}", articleResponses);
         return "features-posts";
     }
@@ -59,7 +62,7 @@ public class ArticleController {
     public String readArticleDetail(@PathVariable Long articleId, ModelMap map) {
         ArticleWithCommentDto getArticleWithComments = articleService.getArticleWithComments(articleId);
         map.addAttribute("articleDetail", ArticleWithCommentsResponse.from(getArticleWithComments));
-        //TODO: 게시글 관련 댓글도 함께 조회가능하도록 구현
+
         log.info("detail response: {}", ArticleWithCommentsResponse.from(getArticleWithComments));
         return "features-posts-detail";
     }
@@ -67,6 +70,12 @@ public class ArticleController {
     @GetMapping("/create")
     public String getCreatePostPage() {
         return "features-post-create";
+    }
+
+    @DeleteMapping("/{articleId}")
+    public String removeArticle(@PathVariable Long articleId) {
+        articleService.deleteArticle(articleId);
+        return "redirect:/articles/index";
     }
 
 

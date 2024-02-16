@@ -32,10 +32,8 @@ public class ArticleService {
             case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
             case ID -> articleRepository.findByHashtag(searchKeyword, pageable).map(ArticleDto::from);
-            case HASHTAG ->
-                    articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
-            case NICKNAME ->
-                    articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
+            case HASHTAG -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
+            case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
         };
     }
 
@@ -64,15 +62,19 @@ public class ArticleService {
 
             if (articleModifyDto.userAccountId() == article.getUserAccount().getUserAccountId()) {
                 if (articleModifyDto.title() != null) {article.setTitle(articleModifyDto.title());}
-                if (articleModifyDto.content() != null) {article.setTitle(articleModifyDto.content());}
-                if (articleModifyDto.hashtag() != null) {article.setTitle(articleModifyDto.hashtag());}
+                if (articleModifyDto.content() != null) {article.setContent(articleModifyDto.content());}
+                if (articleModifyDto.hashtag() != null) {article.setHashtag(articleModifyDto.hashtag());}
             }
         } catch (EntityNotFoundException e) {
-                System.out.println(e);
+                log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", articleModifyDto);
         }
     }
 
     public void deleteArticle(long articleId) {
-
+        try {
+            articleRepository.deleteById(articleId);
+        } catch (EntityNotFoundException e) {
+            log.warn("게시글 삭제 실패. 게시글을 찾을 수 없습니다 - articleId: {}", articleId);
+        }
     }
 }

@@ -11,4 +11,29 @@
             <attr sel="td.hashtag" th:text="${article.hashtag}"/>
         </attr>
     </attr>
+
+    <attr sel="#pagination">
+        <attr sel="li[0]" th:class="'page-item' + (${articles.number} <= 0 ? ' disabled' : ' active')">
+            <attr sel="a"
+                  th:text="'Previous'"
+                  th:href="@{/articles/index(page=${articles.number - 1})}">
+            </attr>
+        </attr>
+
+        <attr sel="li[1]"
+              th:each="pageNumber : ${paginationBarNumbers}"
+              th:class="'page-item' + (${pageNumber} == ${articles.number} ? ' disabled' : ' active')">
+            <attr sel="a"
+                  th:text="${pageNumber + 1}"
+                  th:href="@{/articles/index(page=${pageNumber})}">
+            </attr>
+        </attr>
+
+        <attr sel="li[2]" th:class="'page-item' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : ' active')">
+              <attr sel="a"
+                    th:text="'Next'"
+                    th:href="@{/articles/index(page=${articles.number + 1})}">
+              </attr>
+        </attr>
+    </attr>
 </thlogic>

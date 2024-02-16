@@ -3,6 +3,7 @@ package com.car.sns.dto;
 import com.car.sns.domain.Article;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public record ArticleWithCommentDto(
                 UserAccountDto.from(entity.getUserAccount()),
                 entity.getArticleComment().stream()
                         .map(ArticleCommentDto::from)
-                        .collect(Collectors.toSet()),
+                        .collect(Collectors.toCollection(LinkedHashSet::new)),
                 entity.getTitle(),
                 entity.getContent(),
                 entity.getHashtag(),
