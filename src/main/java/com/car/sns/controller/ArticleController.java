@@ -2,7 +2,9 @@ package com.car.sns.controller;
 
 import com.car.sns.domain.type.SearchType;
 import com.car.sns.dto.ArticleDto;
+import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.response.ArticleResponse;
+import com.car.sns.dto.response.ArticleWithCommentsResponse;
 import com.car.sns.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ public class ArticleController {
 
     /**
      * 검색어가 존재하는 경우 검색 조회 결과 반환, 존재하지 않는 경우 전체 게시글 반환
+     *
      * @param map
      * @return
      */
@@ -45,7 +48,8 @@ public class ArticleController {
             ModelMap map
     ) {
 
-        Page<ArticleResponse> articleResponses = articleService.searchArticles(searchType, searchKeyword, pageable).map(ArticleResponse::from);
+        Page<ArticleResponse> articleResponses = articleService.searchArticles(searchType, searchKeyword, pageable)
+                .map(ArticleResponse::from);
         map.addAttribute("articles", articleResponses);
         log.info("article response: {}", articleResponses);
         return "features-posts";
@@ -53,10 +57,17 @@ public class ArticleController {
 
     @GetMapping("/detail/{articleId}")
     public String readArticleDetail(@PathVariable Long articleId, ModelMap map) {
-        ArticleDto articleDto = articleService.getArticle(articleId);
-        map.addAttribute("articleDetail", ArticleResponse.from(articleDto));
+        ArticleWithCommentDto getArticleWithComments = articleService.getArticleWithComments(articleId);
+        map.addAttribute("articleDetail", ArticleWithCommentsResponse.from(getArticleWithComments));
         //TODO: 게시글 관련 댓글도 함께 조회가능하도록 구현
-        log.info("detail response: {}", ArticleResponse.from(articleDto));
+        log.info("detail response: {}", ArticleWithCommentsResponse.from(getArticleWithComments));
         return "features-posts-detail";
     }
+
+    @GetMapping("/create")
+    public String getCreatePostPage() {
+        return "features-post-create";
+    }
+
+
 }

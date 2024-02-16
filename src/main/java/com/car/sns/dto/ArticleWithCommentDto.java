@@ -6,28 +6,29 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record ArticleWithCommentDto (
+public record ArticleWithCommentDto(
         Long id,
         UserAccountDto userAccountDto,
-        Set<ArticleCommentDto> articleCommentDtoSet,
+        Set<ArticleCommentDto> articleCommentDtos,
         String title,
         String content,
-        LocalDateTime createAt,
+        String hashtag,
+        LocalDateTime createdAt,
         String createdBy,
         LocalDateTime modifiedAt,
         String modifiedBy
-)
-{
+) {
     public static ArticleWithCommentDto of(Long id,
-                                 UserAccountDto userAccountDto,
-                                 Set<ArticleCommentDto> articleCommentDtoSet,
-                                 String title,
-                                 String content,
-                                 LocalDateTime createAt,
-                                 String createdBy,
-                                 LocalDateTime modifiedAt,
-                                 String modifiedBy) {
-        return new ArticleWithCommentDto(id, userAccountDto, articleCommentDtoSet, title, content, createAt, createdBy, modifiedAt, modifiedBy);
+                                           UserAccountDto userAccountDto,
+                                           Set<ArticleCommentDto> articleCommentDtoSet,
+                                           String title,
+                                           String content,
+                                           String hashtag,
+                                           LocalDateTime createAt,
+                                           String createdBy,
+                                           LocalDateTime modifiedAt,
+                                           String modifiedBy) {
+        return new ArticleWithCommentDto(id, userAccountDto, articleCommentDtoSet, title, content, hashtag, createAt, createdBy, modifiedAt, modifiedBy);
     }
 
     public static ArticleWithCommentDto from(Article entity) {
@@ -39,12 +40,12 @@ public record ArticleWithCommentDto (
                         .collect(Collectors.toSet()),
                 entity.getTitle(),
                 entity.getContent(),
+                entity.getHashtag(),
                 entity.getCreatedAt(),
                 entity.getCreatedBy(),
                 entity.getModifiedAt(),
                 entity.getModifiedBy());
     }
-
 
 
 }
