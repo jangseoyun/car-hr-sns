@@ -1,16 +1,15 @@
 package com.car.sns.controller;
 
 import com.car.sns.config.SecurityConfig;
-import com.car.sns.domain.Article;
 import com.car.sns.domain.UserAccount;
 import com.car.sns.dto.ArticleDto;
+import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.UserAccountDto;
 import com.car.sns.service.ArticleService;
 import com.car.sns.service.PaginationService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static java.nio.file.Paths.get;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,15 +79,15 @@ class ArticleControllerTest {
     @DisplayName("[view] read - 게시글 상세 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleDetail() throws Exception {
         Long articleId = 1L;
-        given(articleService.getArticle(articleId)).willReturn(createdArticle());
+        given(articleService.getArticleWithComments(articleId)).willReturn(createdArticleWithCommentsDto());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/detail/" + articleId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-                .andExpect(view().name("features-posts"))
+                .andExpect(view().name("features-posts-detail"))
                 .andExpect(model().attributeExists("articleDetail"));
 
-        then(articleService).should().getArticle(articleId);
+        then(articleService).should().getArticleWithComments(articleId);
     }
 
     @Disabled("구현 중")
@@ -118,6 +118,22 @@ class ArticleControllerTest {
                 "content",
                 "hashtag");
     }
+
+    private ArticleWithCommentDto createdArticleWithCommentsDto() {
+        return ArticleWithCommentDto.of(
+                1L,
+                createUserAccountDto(createdUserAccount()),
+                Set.of(),
+                "title",
+                "content",
+                "hashtag",
+                LocalDateTime.now(),
+                "seo",
+                LocalDateTime.now(),
+                "uno");
+    }
+
+
 
     private UserAccount createdUserAccount() {
         return UserAccount.of("userId",
