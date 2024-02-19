@@ -42,7 +42,8 @@ public class Article extends AuditingFields{
     @ToString.Exclude
     @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article",
-                cascade = CascadeType.ALL)
+                cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY)
     private Set<ArticleComment> articleComment = new HashSet<>();
 
     @ManyToOne(optional = false)

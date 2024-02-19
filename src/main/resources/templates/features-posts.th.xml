@@ -3,35 +3,53 @@
     <attr sel="#header" th:replace="header :: header"></attr>
     <attr sel="#footer" th:replace="footer :: footer"></attr>
 
-    <attr sel="tbody" th:remove="all-but-first">
-        <attr sel="tr[0]" th:each="article : ${articles}">
+    <attr sel="#search-form-box">
+        <attr sel="#search-type" th:remove="all-but-first">
+            <attr sel="option[0]" th:each="searchType : ${searchTypes}"
+                  th:value="${searchType.name}"
+                  th:text="${searchType.description}"
+                  th:selected="${param.searchType != null && (param.searchType.toString == searchType.name)}"
+            />
+        </attr>
 
-            <attr sel="#order-type">
-                <attr sel="select">
-                    <attr sel="option.title/a" th:text="'title'" th:href="@{/articles/index(
-                        page=${article.number},
-                        sort='title' + (*{sort.getOrderFor('title')} != null ? (*{sort.getOrderFor('title').direction.name} != 'DESC' ? ',desc' : '') : '')
-                        )}">
-                    </attr>
-                        <attr sel="option.created-by/a" th:text="'createdBy'" th:href="@{/articles/index(
-                        page=${article.number},
-                        sort='userAccount.userId' + (*{sort.getOrderFor('userAccount.userId')} != null ? (*{sort.getOrderFor('userAccount.userId').direction.name} != 'DESC' ? ',desc' : '') : '')
-                    )}"/>
-                    <attr sel="option.created-at/a" th:text="'createdAt'" th:href="@{/articles/index(
-                        page=${article.number},
-                        sort='createdAt' + (*{sort.getOrderFor('createdAt')} != null ? (*{sort.getOrderFor('createdAt').direction.name} != 'DESC' ? ',desc' : '') : '')
-                    )}"/>
-                    <attr sel="option.hashtag/a" th:text="'hashtag'" th:href="@{/articles/index(
-                        page=${article.number},
-                        sort='hashtag' + (*{sort.getOrderFor('hashtag')} != null ? (*{sort.getOrderFor('hashtag').direction.name} != 'DESC' ? ',desc' : '') : '')
-                    )}"/>
-                </attr>
+        <attr sel="#search-keyword" th:value="${param.searchKeyword}"/>
+    </attr>
+
+    <attr sel="#article-table">
+        <!--<attr sel="thead/tr">
+            <attr sel="th.title/a" th:text="'제목'" th:href="@{/articles/index(
+                page=${articles.number},
+                sort='title' + (*{sort.getOrderFor('title')} != null ? (*{sort.getOrderFor('title').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                searchType=${param.searchType},
+                searchKeyword=${param.searchKeyword}
+            )}"/>
+            <attr sel="th.created-by/a" th:text="'작성자'" th:href="@{/articles/index(
+                page=${articles.number},
+                sort='userAccount.userId' + (*{sort.getOrderFor('userAccount.userId')} != null ? (*{sort.getOrderFor('userAccount.userId').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                searchType=${param.searchType},
+                searchKeyword=${param.searchKeyword}
+            )}"/>
+            <attr sel="th.created-at/a" th:text="'작성일'" th:href="@{/articles/index(
+                page=${articles.number},
+                sort='createdAt' + (*{sort.getOrderFor('createdAt')} != null ? (*{sort.getOrderFor('createdAt').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                searchType=${param.searchType},
+                searchKeyword=${param.searchKeyword}
+            )}"/>
+            <attr sel="th.hashtag/a" th:text="'해시태그'" th:href="@{/articles/index(
+                page=${articles.number},
+                sort='hashtag' + (*{sort.getOrderFor('hashtag')} != null ? (*{sort.getOrderFor('hashtag').direction.name} != 'DESC' ? ',desc' : '') : ''),
+                searchType=${param.searchType},
+                searchKeyword=${param.searchKeyword}
+            )}"/>
+        </attr>-->
+
+        <attr sel="tbody" th:remove="all-but-first">
+            <attr sel="tr[0]" th:each="article : ${articles}">
+                <attr sel="td.title" th:text="${article.title}"/>
+                <attr sel="td.nickname" th:text="${article.nickname}"/>
+                <attr sel="td.created-at" th:text="${article.createdAt}"/>
+                <attr sel="td.hashtag" th:text="${article.hashtag}"/>
             </attr>
-
-            <attr sel="td.title" th:text="${article.title}"/>
-            <attr sel="td.nickname" th:text="${article.nickname}"/>
-            <attr sel="td.created-at" th:text="${article.createdAt}"/>
-            <attr sel="td.hashtag" th:text="${article.hashtag}"/>
         </attr>
     </attr>
 
@@ -39,7 +57,7 @@
         <attr sel="li[0]" th:class="'page-item' + (${articles.number} <= 0 ? ' disabled' : ' active')">
             <attr sel="a"
                   th:text="'Previous'"
-                  th:href="@{/articles/index(page=${articles.number - 1})}">
+                  th:href="@{/articles/index(page=${articles.number - 1}, sort=${param.sort}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">
             </attr>
         </attr>
 
@@ -48,7 +66,7 @@
               th:class="'page-item' + (${pageNumber} == ${articles.number} ? ' disabled' : ' active')">
             <attr sel="a"
                   th:text="${pageNumber + 1}"
-                  th:href="@{/articles/index(page=${pageNumber})}">
+                  th:href="@{/articles/index(page=${pageNumber}, sort=${param.sort}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">
             </attr>
         </attr>
 
@@ -56,8 +74,9 @@
               th:class="'page-item' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : ' active')">
             <attr sel="a"
                   th:text="'Next'"
-                  th:href="@{/articles/index(page=${articles.number + 1})}">
+                  th:href="@{/articles/index(page=${articles.number + 1}, sort=${param.sort}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">
             </attr>
         </attr>
     </attr>
+
 </thlogic>

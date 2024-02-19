@@ -2,11 +2,13 @@ package com.car.sns.controller;
 
 import com.car.sns.config.SecurityConfig;
 import com.car.sns.domain.UserAccount;
+import com.car.sns.domain.type.SearchType;
 import com.car.sns.dto.ArticleDto;
 import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.UserAccountDto;
 import com.car.sns.service.ArticleService;
 import com.car.sns.service.PaginationService;
+import io.micrometer.core.instrument.search.Search;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,6 +74,30 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("paginationBarNumbers"));
 
         then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+    }
+
+    @Test
+    @DisplayName("[view] read - 게시글 검색 기능 - 검색어와 함께 호출: 정상 호출")
+    void givenSearchKeyword_whenSearchingArticles_thenReturnArticleWithComments() throws Exception {
+        //기본 index controller를 이용하여 키워드 검색 전달 (검색 타입, 키워드 전달)
+        SearchType searchTitle = SearchType.TITLE;
+        String searchKeyword = "Donec";
+
+        given(articleService.searchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/articles/index")
+                        .queryParam("searchType", searchTitle.name())
+                        .queryParam("searchKeyword", searchKeyword)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
+                .andExpect(view().name("features-posts"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("searchTypes"));
+
+        then(articleService).should().searchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
