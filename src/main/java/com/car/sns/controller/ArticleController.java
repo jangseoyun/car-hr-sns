@@ -46,6 +46,8 @@ public class ArticleController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
     ) {
+        log.info("searchType: {}", searchType);
+        log.info("searchKeyword: {}", searchKeyword);
 
         Page<ArticleResponse> articleResponses = articleService.searchArticles(searchType, searchKeyword, pageable)
                 .map(ArticleResponse::from);
@@ -53,8 +55,9 @@ public class ArticleController {
 
         map.addAttribute("articles", articleResponses);
         map.addAttribute("paginationBarNumbers", paginationBarNumber);
+        map.addAttribute("searchTypes", SearchType.values());
 
-        log.info("article response: {}", articleResponses);
+        log.info("article response: {}", articleResponses.getContent());
         return "features-posts";
     }
 
