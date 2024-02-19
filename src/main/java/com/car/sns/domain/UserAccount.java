@@ -14,6 +14,7 @@ import java.util.Objects;
 @ToString(callSuper = true)
 @Table(name = "t_user_account",
         indexes = {
+                @Index(columnList = "userId", unique = true),
                 @Index(columnList = "email", unique = true),
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
