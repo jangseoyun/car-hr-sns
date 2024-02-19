@@ -94,16 +94,17 @@
                                     <h4>Posts</h4>
                                 </div>
                                 <div class="card-body">
-                                    <div class="float-left">
+                                    <div id="order-type" class="float-left">
                                         <select class="form-control selectric">
-                                            <option>정렬 조건 필터</option>
-                                            <option>Move to Draft</option>
-                                            <option>Move to Pending</option>
-                                            <option>Delete Pemanently</option>
+                                            <option selected>정렬 조건 필터</option>
+                                            <option class="title"><a href="">Title</a></option>
+                                            <option class="created-by"><a href="">CreatedBy</a></option>
+                                            <option class="created-at"><a href="">CreatedAt</a></option>
+                                            <option class="hashtag"><a href="">Hashtag</a></option>
                                         </select>
                                     </div>
                                     <div class="float-right">
-                                        <form>
+                                        <form id="search-form-box">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" placeholder="Search">
                                                 <div class="input-group-append">

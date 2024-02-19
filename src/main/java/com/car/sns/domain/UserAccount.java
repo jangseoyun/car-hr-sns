@@ -17,7 +17,7 @@ import java.util.Objects;
                 @Index(columnList = "email", unique = true),
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
-})
+        })
 public class UserAccount extends AuditingFields {
 
     @Id
@@ -26,7 +26,7 @@ public class UserAccount extends AuditingFields {
     private Long userAccountId;
 
     @Column(name = "user_id"
-    , length = 50)
+            , length = 50)
     private String userId;
 
     @Column(name = "user_password"
