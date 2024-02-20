@@ -18,7 +18,7 @@ import java.util.Set;
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
         })
-public class Article extends AuditingFields{
+public class Article extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
@@ -42,8 +42,8 @@ public class Article extends AuditingFields{
     @ToString.Exclude
     @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article",
-                cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private Set<ArticleComment> articleComment = new HashSet<>();
 
     @ManyToOne(optional = false,
