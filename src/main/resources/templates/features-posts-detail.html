@@ -74,7 +74,10 @@
             <div class="card bg-light">
                 <div id="comment-form" class="card-body">
                     <!-- Comment form-->
-                    <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                    <form id="comment-form-box" class="mb-4">
+                        <input name="articleId" type="hidden" class="article-id"/>
+                        <textarea class="article-content form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                    </form>
                     <!-- Comment with nested comments-->
                     <!--<div class="d-flex mb-4">
                         &lt;!&ndash; Parent comment&ndash;&gt;

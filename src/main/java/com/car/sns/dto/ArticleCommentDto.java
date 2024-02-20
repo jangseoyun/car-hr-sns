@@ -1,6 +1,8 @@
 package com.car.sns.dto;
 
+import com.car.sns.domain.Article;
 import com.car.sns.domain.ArticleComment;
+import com.car.sns.domain.UserAccount;
 
 import java.time.LocalDateTime;
 
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
  * DTO for {@link ArticleComment}
  */
 public record ArticleCommentDto(
-        Long ArticleId,
+        Long articleId,
         UserAccountDto userAccountDto,
         LocalDateTime createdAt,
         String createdBy,
@@ -16,20 +18,10 @@ public record ArticleCommentDto(
         String modifiedBy,
         String content
 ) {
-    public ArticleCommentDto(Long ArticleId,
+    public static ArticleCommentDto of(Long articleId,
                              UserAccountDto userAccountDto,
-                             LocalDateTime createdAt,
-                             String createdBy,
-                             LocalDateTime modifiedAt,
-                             String modifiedBy,
                              String content) {
-        this.ArticleId = ArticleId;
-        this.userAccountDto = userAccountDto;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.modifiedAt = modifiedAt;
-        this.modifiedBy = modifiedBy;
-        this.content = content;
+        return new ArticleCommentDto(articleId, userAccountDto, null, null, null, null, content);
     }
 
     public static ArticleCommentDto from(ArticleComment entity) {
@@ -42,5 +34,9 @@ public record ArticleCommentDto(
                 entity.getModifiedBy(),
                 entity.getContent()
         );
+    }
+
+    public ArticleComment toEntity(Article article, UserAccount userAccount) {
+        return ArticleComment.of(userAccount, article, content);
     }
 }
