@@ -8,7 +8,6 @@ import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.UserAccountDto;
 import com.car.sns.service.ArticleService;
 import com.car.sns.service.PaginationService;
-import io.micrometer.core.instrument.search.Search;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +25,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-import static java.nio.file.Paths.get;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("view controller - 게시글")
