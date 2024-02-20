@@ -46,7 +46,8 @@ public class Article extends AuditingFields{
                 fetch = FetchType.LAZY)
     private Set<ArticleComment> articleComment = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,
+            cascade = CascadeType.ALL)
     @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
