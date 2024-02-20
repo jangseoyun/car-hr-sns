@@ -2,8 +2,10 @@ package com.car.sns.controller;
 
 import com.car.sns.domain.type.SearchType;
 import com.car.sns.dto.ArticleWithCommentDto;
+import com.car.sns.dto.request.ArticleModifyRequest;
 import com.car.sns.dto.response.ArticleResponse;
 import com.car.sns.dto.response.ArticleWithCommentsResponse;
+import com.car.sns.dto.security.CarAppPrincipal;
 import com.car.sns.service.ArticleService;
 import com.car.sns.service.PaginationService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +67,7 @@ public class ArticleController {
     public String searchHashtag(
             @RequestParam(required = false) String hashtagKeyword,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            ModelMap map)
-    {
+            ModelMap map) {
         Page<ArticleResponse> articleResponses = articleService.searchArticlesViaHashtag(hashtagKeyword, pageable).map(ArticleResponse::from);
         List<Integer> paginationBarNumber = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
         List<String> hashtags = articleService.getHashtags();
@@ -79,7 +81,8 @@ public class ArticleController {
     }
 
     @GetMapping("/detail/{articleId}")
-    public String readArticleDetail(@PathVariable Long articleId, ModelMap map) {
+    public String readArticleDetail(@PathVariable Long articleId, ModelMap map
+    ) {
         ArticleWithCommentDto getArticleWithComments = articleService.getArticleWithComments(articleId);
         map.addAttribute("articleDetail", ArticleWithCommentsResponse.from(getArticleWithComments));
 
@@ -98,5 +101,13 @@ public class ArticleController {
         return "redirect:/articles/index";
     }
 
+    @PutMapping("")
+    public String modifyPostContent(@AuthenticationPrincipal CarAppPrincipal carAppPrincipal,
+                                    ArticleModifyRequest articleModifyRequest,
+                                    ModelMap map) {
 
+        articleService.updateArticle(articleModifyRequest, carAppPrincipal.getUsername());
+
+        return "redirect:/articles/detail/" + articleModifyRequest.articleId();
+    }
 }

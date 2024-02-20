@@ -2,7 +2,6 @@ package com.car.sns.dto;
 
 import com.car.sns.domain.UserAccount;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -26,6 +25,14 @@ public record UserAccountDto(
                                     String nickname,
                                     String memo) {
         return new UserAccountDto(createdAt, createdBy, userId, userPassword, email, nickname, memo);
+    }
+
+    public static UserAccountDto of(String userId,
+                                    String userPassword,
+                                    String email,
+                                    String nickname,
+                                    String memo) {
+        return new UserAccountDto(null, null, userId, userPassword, email, nickname, memo);
     }
 
     public static UserAccountDto from(UserAccount userAccount) {
