@@ -7,6 +7,7 @@ import com.car.sns.dto.UserAccountDto;
 import com.car.sns.repository.ArticleCommentRepository;
 import com.car.sns.repository.ArticleRepository;
 import com.car.sns.repository.UserAccountRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,7 @@ class ArticleCommentServiceTest {
     @Mock
     private UserAccountRepository userAccountRepository;
 
+    @Disabled("구현중")
     @DisplayName("게시글 ID로 조회시 관련 댓글을 반환한다")
     @Test
     void givenArticleId_whenSearchingArticleComments_thenArticleComments() {

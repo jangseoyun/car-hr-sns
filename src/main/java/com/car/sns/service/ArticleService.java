@@ -1,11 +1,13 @@
 package com.car.sns.service;
 
 import com.car.sns.domain.Article;
+import com.car.sns.domain.UserAccount;
 import com.car.sns.domain.type.SearchType;
 import com.car.sns.dto.ArticleDto;
-import com.car.sns.dto.ArticleModifyDto;
+import com.car.sns.dto.request.ArticleModifyRequest;
 import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.repository.ArticleRepository;
+import com.car.sns.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ArticleService {
+    private final UserAccountRepository userAccountRepository;
 
     private final ArticleRepository articleRepository;
 
@@ -58,11 +62,11 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public void updateArticle(ArticleModifyDto articleModifyDto) {
+    public void updateArticle(ArticleModifyRequest articleModifyDto, String authUsername) {
         try {
             Article article = articleRepository.getReferenceById(articleModifyDto.articleId());
 
-            if (articleModifyDto.userAccountId() == article.getUserAccount().getUserAccountId()) {
+            if (articleModifyDto.createdBy() == authUsername) {
                 if (articleModifyDto.title() != null) {article.setTitle(articleModifyDto.title());}
                 if (articleModifyDto.content() != null) {article.setContent(articleModifyDto.content());}
                 if (articleModifyDto.hashtag() != null) {article.setHashtag(articleModifyDto.hashtag());}

@@ -2,6 +2,7 @@ package com.car.sns.controller;
 
 import com.car.sns.dto.UserAccountDto;
 import com.car.sns.dto.request.ArticleCommentRequest;
+import com.car.sns.dto.security.CarAppPrincipal;
 import com.car.sns.service.ArticleCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,9 @@ public class ArticleCommentController {
 
     //추가
     @PostMapping("/new")
-    public String postNewArticleComment(ArticleCommentRequest articleCommentRequest) {
-        //TODO: 사용자 인증 정보 구현
+    public String postNewArticleComment(ArticleCommentRequest articleCommentRequest,
+                                        @AuthenticationPrincipal CarAppPrincipal carAppPrincipal
+    ) {
         log.info("request: {}", articleCommentRequest.toString());
         UserAccountDto userAccountDto = UserAccountDto.of(null, "Uno", "Uno", "2343", "uno@email.com", "nickname", null);
         articleCommentService.saveArticleComment(articleCommentRequest.toDto(userAccountDto));

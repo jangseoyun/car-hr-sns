@@ -1,5 +1,6 @@
 package com.car.sns.controller;
 
+import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.dto.ArticleCommentDto;
 import com.car.sns.dto.request.ArticleCommentRequest;
 import com.car.sns.service.ArticleCommentService;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("TODO")
-@Import(SecurityConfig.class)
+@Import(SecurityConfigTest.class)
 @WebMvcTest(ArticleCommentController.class)
 class ArticleCommentControllerTest {
 
@@ -35,6 +38,10 @@ class ArticleCommentControllerTest {
     private ArticleCommentService articleCommentService;
 
     @DisplayName("given_when_then")
+    @WithUserDetails(
+            value = "seo",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
     @Test
     void givenCommentInfo_whenSavingComment_thenReturnArticleCommentView() throws Exception {
         //given
@@ -42,12 +49,11 @@ class ArticleCommentControllerTest {
         willDoNothing().given(articleCommentService).saveArticleComment(any(ArticleCommentDto.class));
 
         //when
-        mockMvc.perform(post("/comments")
+        mockMvc.perform(post("/comments/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("features-posts-detail"))
                 .andExpect(redirectedUrl("/articles/detail/" + articleId));
 
         //then

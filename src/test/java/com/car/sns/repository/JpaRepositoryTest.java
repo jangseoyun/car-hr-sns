@@ -7,13 +7,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import(JpaConfig.class)
+@Import(JpaRepositoryTest.TestJpaConfig.class)
 @DataJpaTest
 @DisplayName("JPA 연결 테스트.")
 class JpaRepositoryTest {
@@ -43,15 +48,14 @@ class JpaRepositoryTest {
     @Test
     @DisplayName("insert test")
     void givenTestData_whenInserting_thenWorksFine() {
-        UserAccount userAccount = UserAccount.of("user id", "password", "email@naver.com", "nickname", null);
+        UserAccount userAccount = UserAccount.of("userid", "password", "email@naver.com", "nickname", null);
 
         long previousCount = articleRepository.count();
         Article article = Article.of(userAccount,"new title", "new content", "hashtag");
 
-        Article savedArticle = articleRepository.save(article);
+        articleRepository.save(article);
 
         assertThat(articleRepository.count())
-                .isNotNull()
                 .isEqualTo(previousCount + 1);
     }
 
@@ -86,6 +90,15 @@ class JpaRepositoryTest {
 
         assertThat(articleCommentRepository.count())
                 .isEqualTo(previousArticleCommentCount - deletedCommentSize);
+    }
+
+    @EnableJpaAuditing
+    @TestConfiguration
+    public static class TestJpaConfig {
+        @Bean
+        public AuditorAware<String> auditorAware() {
+            return () -> Optional.of("seo");
+        }
     }
 
 }

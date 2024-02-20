@@ -1,11 +1,13 @@
 package com.car.sns.controller;
 
 import com.car.sns.config.SecurityConfig;
+import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.domain.UserAccount;
 import com.car.sns.domain.type.SearchType;
 import com.car.sns.dto.ArticleDto;
 import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.UserAccountDto;
+import com.car.sns.dto.request.ArticleCommentRequest;
 import com.car.sns.service.ArticleService;
 import com.car.sns.service.PaginationService;
 import org.junit.jupiter.api.Disabled;
@@ -18,6 +20,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -31,7 +36,7 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("view controller - 게시글")
-@Import(SecurityConfig.class)
+@Import(SecurityConfigTest.class)
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
 
@@ -47,6 +52,10 @@ class ArticleControllerTest {
     }
 
     @Test
+    @WithUserDetails(
+            value = "seo",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
     @DisplayName("[view] write - 게시글 작성 페이지 - 정상 호출")
     void givenNothing_whenRequestingCreateView_thenReturnArticleCreateView() throws Exception {
 
@@ -57,6 +66,7 @@ class ArticleControllerTest {
     }
 
     @Test
+    @WithMockUser
     @DisplayName("[view] read - 게시글 리스트 (게시판) 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleView() throws Exception {
         given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
@@ -98,6 +108,10 @@ class ArticleControllerTest {
     }
 
     @Test
+    @WithUserDetails(
+            value = "seo",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
     @DisplayName("[view] read - 게시글 상세 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleDetail() throws Exception {
         Long articleId = 1L;
@@ -123,6 +137,10 @@ class ArticleControllerTest {
     }
 
     @Test
+    @WithUserDetails(
+            value = "seo",
+            setupBefore = TestExecutionEvent.TEST_EXECUTION
+    )
     @DisplayName("[view] get - 게시글 해시태그 검색 전용 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnSearchHashtag() throws Exception {
         List<String> hashtags = List.of("#pink", "#red", "blue");
