@@ -2,6 +2,7 @@ package com.car.sns.repository;
 
 import com.car.sns.domain.Article;
 import com.car.sns.domain.QArticle;
+import com.car.sns.repository.querydsl.ArticleRepositoryCustom;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.nio.channels.FileChannel;
 
 @RepositoryRestResource
 public interface ArticleRepository extends JpaRepository<Article, Long>
+        , ArticleRepositoryCustom
         , QuerydslPredicateExecutor<Article>
         , QuerydslBinderCustomizer<QArticle> {
 

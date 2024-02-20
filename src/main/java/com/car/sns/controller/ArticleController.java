@@ -1,7 +1,6 @@
 package com.car.sns.controller;
 
 import com.car.sns.domain.type.SearchType;
-import com.car.sns.dto.ArticleDto;
 import com.car.sns.dto.ArticleWithCommentDto;
 import com.car.sns.dto.response.ArticleResponse;
 import com.car.sns.dto.response.ArticleWithCommentsResponse;
@@ -58,6 +57,24 @@ public class ArticleController {
         map.addAttribute("searchTypes", SearchType.values());
 
         log.info("article response: {}", articleResponses.getContent());
+        return "features-posts";
+    }
+
+    @GetMapping("/hashtag")
+    public String searchHashtag(
+            @RequestParam(required = false) String hashtagKeyword,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            ModelMap map)
+    {
+        Page<ArticleResponse> articleResponses = articleService.searchArticlesViaHashtag(hashtagKeyword, pageable).map(ArticleResponse::from);
+        List<Integer> paginationBarNumber = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
+        List<String> hashtags = articleService.getHashtags();
+
+        map.addAttribute("articles", articleResponses);
+        map.addAttribute("hashtags", hashtags);
+        map.addAttribute("paginationBarNumbers", paginationBarNumber);
+        map.addAttribute("searchType", SearchType.HASHTAG);
+
         return "features-posts";
     }
 
