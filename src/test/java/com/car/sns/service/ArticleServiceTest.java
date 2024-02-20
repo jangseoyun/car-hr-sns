@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -137,6 +138,53 @@ class ArticleServiceTest {
 
         then(articleRepository).should().findById(articleId);
     }
+
+    @DisplayName("[게시글 검색] - 해시태그 키워드를 통해 게시글 검색 : 검색어가 없는 경우")
+    @Test
+    void givenHashtagNull_whenSearchingArticle_thenReturnNothing() {
+        //given
+        Pageable pageable = Pageable.ofSize(20);
+
+        //when
+        Page<ArticleDto> articles = sut.searchArticlesViaHashtag(null, pageable);
+
+        //then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).shouldHaveNoInteractions();
+    }
+
+    @DisplayName("[해시태그 검색] - 해시태그 키워드를 통해 게시글 검색 : 검색어가 있는 경우")
+    @Test
+    void givenHashtag_whenSearchingArticle_thenReturnArticles() {
+        //given
+        Pageable pageable = Pageable.ofSize(20);
+        String searchKeyword = "#pink";
+        //TODO: hashtag 검색 시 #을 넣어서 검색하는 경우 중복으로 인한 에러 발생
+        given(articleRepository.findByHashtag(searchKeyword, pageable)).willReturn(Page.empty(pageable));
+
+        //when
+        Page<ArticleDto> articles = sut.searchArticlesViaHashtag(searchKeyword, pageable);
+
+        //then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).should().findByHashtag(searchKeyword, pageable);
+    }
+
+    @DisplayName("[해시태그 조회] - 해시태그 중복 제거하여 리스트로 반환")
+    @Test
+    void givenNothing_whenCalling_thenReturnHashtags() {
+        //given
+        List<String> expectedHashtags = List.of("#pink", "#red", "yellow");
+        given(articleRepository.findAllDistinctHashtag()).willReturn(expectedHashtags);
+
+        //when
+        List<String> hashtags = sut.getHashtags();
+
+        //then
+        assertThat(hashtags).isEqualTo(expectedHashtags);
+        then(articleRepository).should().findAllDistinctHashtag();
+    }
+
 
     @Test
     void givenArticleIdAndModifiedInfo_whenUpdatingArticle_thenUpdateArticle() {
