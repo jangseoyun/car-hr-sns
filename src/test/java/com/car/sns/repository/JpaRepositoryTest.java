@@ -52,7 +52,7 @@ class JpaRepositoryTest {
         UserAccount userAccount = UserAccount.of("userid", "password", "email@naver.com", "nickname", null);
 
         long previousCount = articleRepository.count();
-        Article article = Article.of(userAccount,"new title", "new content", "hashtag");
+        Article article = Article.of(userAccount,"new title", "new content");
 
         articleRepository.save(article);
 
@@ -66,13 +66,8 @@ class JpaRepositoryTest {
 
         Article article = articleRepository.findById(1L).orElseThrow();
 
-        String updateHashtag = "#springboot";
-        article.setHashtag(updateHashtag);
 
         Article savedArticle = articleRepository.saveAndFlush(article);
-
-        assertThat(savedArticle)
-                .hasFieldOrPropertyWithValue("hashtag", updateHashtag);
     }
 
     @Test

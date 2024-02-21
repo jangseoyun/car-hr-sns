@@ -201,7 +201,7 @@ class ArticleServiceTest {
 
         //when
         articleManagementUseCase.updateArticle(
-                ArticleModifyRequest.of(1L, "title", "content", "hashtag", "seo"),
+                ArticleModifyRequest.of(1L, "title", "content", "seo"),
                 "seo"
         );
 
@@ -232,7 +232,7 @@ class ArticleServiceTest {
 
     private Article createdArticle() {
         UserAccount userAccount = createdUserAccount();
-        return Article.of(userAccount, "title", "content", "hashtag");
+        return Article.of(userAccount, "title", "content");
     }
 
     private UserAccount createdUserAccount() {

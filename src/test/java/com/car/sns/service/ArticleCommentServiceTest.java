@@ -76,6 +76,6 @@ class ArticleCommentServiceTest {
 
     private Article createArticle() {
         UserAccountDto userAccountDto = UserAccountDto.of(null, null, "uno", "pw", "email@email.com", "nickname", null);
-        return Article.of(userAccountDto.toEntity(), "title", "content", "hashtag");
+        return Article.of(userAccountDto.toEntity(), "title", "content");
     }
 }
