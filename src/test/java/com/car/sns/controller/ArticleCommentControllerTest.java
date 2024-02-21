@@ -3,7 +3,7 @@ package com.car.sns.controller;
 import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.domain.comment.model.ArticleCommentDto;
 import com.car.sns.presentation.controller.ArticleCommentController;
-import com.car.sns.domain.comment.service.ArticleCommentService;
+import com.car.sns.domain.comment.service.ArticleCommentWriteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ class ArticleCommentControllerTest {
     }
 
     @MockBean
-    private ArticleCommentService articleCommentService;
+    private ArticleCommentWriteService articleCommentService;
 
     @DisplayName("given_when_then")
     @WithUserDetails(

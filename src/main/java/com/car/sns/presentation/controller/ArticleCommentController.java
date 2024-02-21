@@ -3,7 +3,7 @@ package com.car.sns.presentation.controller;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.model.request.ArticleCommentRequest;
 import com.car.sns.security.CarAppPrincipal;
-import com.car.sns.domain.comment.service.ArticleCommentService;
+import com.car.sns.domain.comment.service.ArticleCommentWriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/comments")
 public class ArticleCommentController {
 
-    private final ArticleCommentService articleCommentService;
+    private final ArticleCommentWriteService articleCommentService;
 
     //추가
     @PostMapping("/new")

@@ -1,13 +1,14 @@
 package com.car.sns.presentation.controller;
 
+import com.car.sns.application.usecase.ArticleManagementUseCase;
+import com.car.sns.application.usecase.ArticleReaderUseCase;
+import com.car.sns.application.usecase.PaginationUseCase;
 import com.car.sns.domain.board.type.SearchType;
 import com.car.sns.presentation.model.ArticleWithCommentDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import com.car.sns.presentation.model.response.ArticleResponse;
 import com.car.sns.presentation.model.response.ArticleWithCommentsResponse;
 import com.car.sns.security.CarAppPrincipal;
-import com.car.sns.domain.board.service.ArticleService;
-import com.car.sns.domain.board.service.PaginationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,19 +28,19 @@ import java.util.List;
 @Controller
 public class ArticleController {
 
-    private final ArticleService articleService;
-    private final PaginationService paginationService;
+    private final ArticleReaderUseCase articleUseCase;
+    private final ArticleManagementUseCase articleManagementUseCase;
+    private final PaginationUseCase paginationUseCase;
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
+    @GetMapping("/create")
+    public String getCreatePostPage() {
+        return "features-post-create";
     }
 
     /**
-     * 검색어가 존재하는 경우 검색 조회 결과 반환, 존재하지 않는 경우 전체 게시글 반환
-     *
-     * @param map
-     * @return
+     * 게시글 목록 Index
+     * searchType, searchKeyword 존재 X : 게시글 전체 조회
+     * searchType, searchKeyword 존재 O : 타입/키워드를 필터링으로 해당 게시글 조회
      */
     @GetMapping("/index")
     public String index(
@@ -48,12 +49,10 @@ public class ArticleController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
     ) {
-        log.info("searchType: {}", searchType);
-        log.info("searchKeyword: {}", searchKeyword);
 
-        Page<ArticleResponse> articleResponses = articleService.searchArticles(searchType, searchKeyword, pageable)
+        Page<ArticleResponse> articleResponses = articleUseCase.getAllOrSearchArticles(searchType, searchKeyword, pageable)
                 .map(ArticleResponse::from);
-        List<Integer> paginationBarNumber = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
+        List<Integer> paginationBarNumber = paginationUseCase.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
 
         map.addAttribute("articles", articleResponses);
         map.addAttribute("paginationBarNumbers", paginationBarNumber);
@@ -63,51 +62,28 @@ public class ArticleController {
         return "features-posts";
     }
 
-    @GetMapping("/hashtag")
-    public String searchHashtag(
-            @RequestParam(required = false) String hashtagKeyword,
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            ModelMap map) {
-        Page<ArticleResponse> articleResponses = articleService.searchArticlesViaHashtag(hashtagKeyword, pageable).map(ArticleResponse::from);
-        List<Integer> paginationBarNumber = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
-        List<String> hashtags = articleService.getHashtags();
-
-        map.addAttribute("articles", articleResponses);
-        map.addAttribute("hashtags", hashtags);
-        map.addAttribute("paginationBarNumbers", paginationBarNumber);
-        map.addAttribute("searchType", SearchType.HASHTAG);
-
-        return "features-posts";
-    }
-
     @GetMapping("/detail/{articleId}")
     public String readArticleDetail(@PathVariable Long articleId, ModelMap map
     ) {
-        ArticleWithCommentDto getArticleWithComments = articleService.getArticleWithComments(articleId);
+        ArticleWithCommentDto getArticleWithComments = articleUseCase.getArticleDetailWithComments(articleId);
         map.addAttribute("articleDetail", ArticleWithCommentsResponse.from(getArticleWithComments));
 
         log.info("detail response: {}", ArticleWithCommentsResponse.from(getArticleWithComments));
         return "features-posts-detail";
     }
 
-    @GetMapping("/create")
-    public String getCreatePostPage() {
-        return "features-post-create";
-    }
-
     @DeleteMapping("/{articleId}")
-    public String removeArticle(@PathVariable Long articleId) {
-        articleService.deleteArticle(articleId);
+    public String removeArticle(@PathVariable Long articleId)
+    {
+        articleManagementUseCase.deleteArticle(articleId);
         return "redirect:/articles/index";
     }
 
     @PutMapping("")
     public String modifyPostContent(@AuthenticationPrincipal CarAppPrincipal carAppPrincipal,
-                                    ArticleModifyRequest articleModifyRequest,
-                                    ModelMap map) {
-
-        articleService.updateArticle(articleModifyRequest, carAppPrincipal.getUsername());
-
+                                    ArticleModifyRequest articleModifyRequest)
+    {
+        articleManagementUseCase.updateArticle(articleModifyRequest, carAppPrincipal.getUsername());
         return "redirect:/articles/detail/" + articleModifyRequest.articleId();
     }
 }

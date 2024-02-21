@@ -1,7 +1,7 @@
 package com.car.sns.domain.board.repository.querydsl;
 
 import com.car.sns.domain.board.entity.Article;
-import com.car.sns.domain.QArticle;
+import com.car.sns.domain.board.entity.QArticle;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
