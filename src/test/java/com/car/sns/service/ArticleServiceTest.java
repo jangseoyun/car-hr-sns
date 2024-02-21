@@ -1,11 +1,12 @@
 package com.car.sns.service;
 
-import com.car.sns.domain.Article;
-import com.car.sns.domain.UserAccount;
-import com.car.sns.domain.type.SearchType;
-import com.car.sns.dto.ArticleDto;
-import com.car.sns.dto.request.ArticleModifyRequest;
-import com.car.sns.repository.ArticleRepository;
+import com.car.sns.domain.board.service.ArticleService;
+import com.car.sns.domain.board.entity.Article;
+import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.ArticleDto;
+import com.car.sns.presentation.model.request.ArticleModifyRequest;
+import com.car.sns.domain.board.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

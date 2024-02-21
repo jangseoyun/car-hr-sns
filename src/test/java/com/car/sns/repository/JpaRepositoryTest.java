@@ -1,8 +1,9 @@
 package com.car.sns.repository;
 
-import com.car.sns.config.JpaConfig;
-import com.car.sns.domain.Article;
-import com.car.sns.domain.UserAccount;
+import com.car.sns.domain.board.entity.Article;
+import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.comment.repository.ArticleCommentRepository;
+import com.car.sns.domain.board.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

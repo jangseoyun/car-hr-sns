@@ -1,15 +1,14 @@
 package com.car.sns.controller;
 
-import com.car.sns.config.SecurityConfig;
 import com.car.sns.config.SecurityConfigTest;
-import com.car.sns.domain.UserAccount;
-import com.car.sns.domain.type.SearchType;
-import com.car.sns.dto.ArticleDto;
-import com.car.sns.dto.ArticleWithCommentDto;
-import com.car.sns.dto.UserAccountDto;
-import com.car.sns.dto.request.ArticleCommentRequest;
-import com.car.sns.service.ArticleService;
-import com.car.sns.service.PaginationService;
+import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.ArticleDto;
+import com.car.sns.presentation.model.ArticleWithCommentDto;
+import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.presentation.controller.ArticleController;
+import com.car.sns.domain.board.service.ArticleService;
+import com.car.sns.domain.board.service.PaginationService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

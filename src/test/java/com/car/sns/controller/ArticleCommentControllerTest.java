@@ -1,10 +1,9 @@
 package com.car.sns.controller;
 
 import com.car.sns.config.SecurityConfigTest;
-import com.car.sns.dto.ArticleCommentDto;
-import com.car.sns.dto.request.ArticleCommentRequest;
-import com.car.sns.service.ArticleCommentService;
-import org.apache.catalina.security.SecurityConfig;
+import com.car.sns.domain.comment.model.ArticleCommentDto;
+import com.car.sns.presentation.controller.ArticleCommentController;
+import com.car.sns.domain.comment.service.ArticleCommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
