@@ -1,14 +1,14 @@
 package com.car.sns.controller;
 
+import com.car.sns.application.usecase.ArticleReaderUseCase;
 import com.car.sns.config.SecurityConfigTest;
-import com.car.sns.domain.user.entity.UserAccount;
-import com.car.sns.domain.board.type.SearchType;
 import com.car.sns.domain.board.model.ArticleDto;
-import com.car.sns.presentation.model.ArticleWithCommentDto;
+import com.car.sns.domain.board.service.PaginationService;
+import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.user.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.controller.ArticleController;
-import com.car.sns.domain.board.service.ArticleService;
-import com.car.sns.domain.board.service.PaginationService;
+import com.car.sns.presentation.model.ArticleWithCommentDto;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class ArticleControllerTest {
     private final MockMvc mockMvc;
 
     @MockBean
-    private ArticleService articleService;
+    private ArticleReaderUseCase articleReaderUseCase;
     @MockBean
     private PaginationService paginationService;
 
@@ -68,7 +68,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view] read - 게시글 리스트 (게시판) 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleView() throws Exception {
-        given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(articleReaderUseCase.getAllOrSearchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/index"))
@@ -78,7 +78,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"))
                 .andExpect(model().attributeExists("paginationBarNumbers"));
 
-        then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
+        then(articleReaderUseCase).should().getAllOrSearchArticles(eq(null), eq(null), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
@@ -89,7 +89,7 @@ class ArticleControllerTest {
         SearchType searchTitle = SearchType.TITLE;
         String searchKeyword = "Donec";
 
-        given(articleService.searchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class))).willReturn(Page.empty());
+        given(articleReaderUseCase.getAllOrSearchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class))).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/index")
@@ -102,7 +102,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"))
                 .andExpect(model().attributeExists("searchTypes"));
 
-        then(articleService).should().searchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class));
+        then(articleReaderUseCase).should().getAllOrSearchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
@@ -114,7 +114,7 @@ class ArticleControllerTest {
     @DisplayName("[view] read - 게시글 상세 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleDetail() throws Exception {
         Long articleId = 1L;
-        given(articleService.getArticleWithComments(articleId)).willReturn(createdArticleWithCommentsDto());
+        given(articleReaderUseCase.getArticleDetailWithComments(articleId)).willReturn(createdArticleWithCommentsDto());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/detail/" + articleId))
                 .andExpect(status().isOk())
@@ -122,7 +122,7 @@ class ArticleControllerTest {
                 .andExpect(view().name("features-posts-detail"))
                 .andExpect(model().attributeExists("articleDetail"));
 
-        then(articleService).should().getArticleWithComments(articleId);
+        then(articleReaderUseCase).should().getArticleDetailWithComments(articleId);
     }
 
     @Disabled("구현 중")
@@ -135,6 +135,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles/search"));
     }
 
+    @Disabled("구조변경으로 hashtag test 분리")
     @Test
     @WithUserDetails(
             value = "seo",
@@ -142,9 +143,9 @@ class ArticleControllerTest {
     )
     @DisplayName("[view] get - 게시글 해시태그 검색 전용 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnSearchHashtag() throws Exception {
-        List<String> hashtags = List.of("#pink", "#red", "blue");
-        given(articleService.searchArticlesViaHashtag(eq(null), any(Pageable.class))).willReturn(Page.empty());
-        given(articleService.getHashtags()).willReturn(hashtags);
+        /*List<String> hashtags = List.of("#pink", "#red", "blue");
+        given(articleReaderUseCase.searchArticlesViaHashtag(eq(null), any(Pageable.class))).willReturn(Page.empty());
+        //given(articleService.getHashtags()).willReturn(hashtags);
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(1, 2, 3, 4, 5));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/hashtag"))
@@ -157,7 +158,7 @@ class ArticleControllerTest {
 
         then(articleService).should().searchArticlesViaHashtag(eq(null), any(Pageable.class));
         then(articleService).should().getHashtags();
-        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());*/
     }
 
     private ArticleDto createdArticle() {

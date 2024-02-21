@@ -10,21 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ArticleCommentService {
+public class ArticleCommentWriteService {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
     private final UserAccountRepository userAccountRepository;
-
-    @Transactional(readOnly = true)
-    public List<ArticleCommentDto> searchArticleComment(long articleId) {
-        return List.of();
-    }
 
     public void saveArticleComment(ArticleCommentDto articleCommentDto) {
         Article article = articleRepository.getReferenceById(articleCommentDto.articleId());
