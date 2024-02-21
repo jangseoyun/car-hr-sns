@@ -2,7 +2,7 @@ package com.car.sns.presentation.controller;
 
 import com.car.sns.application.usecase.HashtagUseCase;
 import com.car.sns.application.usecase.PaginationUseCase;
-import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.presentation.model.response.ArticleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
