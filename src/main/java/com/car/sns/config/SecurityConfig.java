@@ -1,7 +1,7 @@
 package com.car.sns.config;
 
 import com.car.sns.domain.user.model.UserAccountDto;
-import com.car.sns.security.security.CarAppPrincipal;
+import com.car.sns.security.CarAppPrincipal;
 import com.car.sns.domain.user.repository.UserAccountRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

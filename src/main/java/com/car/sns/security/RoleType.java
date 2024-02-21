@@ -1,4 +1,4 @@
-package com.car.sns.security.security;
+package com.car.sns.security;
 
 import lombok.Getter;
 

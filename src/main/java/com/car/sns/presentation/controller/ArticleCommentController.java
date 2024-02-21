@@ -2,7 +2,7 @@ package com.car.sns.presentation.controller;
 
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.model.request.ArticleCommentRequest;
-import com.car.sns.security.security.CarAppPrincipal;
+import com.car.sns.security.CarAppPrincipal;
 import com.car.sns.domain.comment.service.ArticleCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

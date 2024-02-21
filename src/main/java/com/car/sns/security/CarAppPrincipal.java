@@ -1,4 +1,4 @@
-package com.car.sns.security.security;
+package com.car.sns.security;
 
 import com.car.sns.domain.user.model.UserAccountDto;
 import org.springframework.security.core.GrantedAuthority;

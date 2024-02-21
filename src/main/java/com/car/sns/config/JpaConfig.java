@@ -1,6 +1,6 @@
 package com.car.sns.config;
 
-import com.car.sns.security.security.CarAppPrincipal;
+import com.car.sns.security.CarAppPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

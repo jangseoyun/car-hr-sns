@@ -5,7 +5,7 @@ import com.car.sns.presentation.model.ArticleWithCommentDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import com.car.sns.presentation.model.response.ArticleResponse;
 import com.car.sns.presentation.model.response.ArticleWithCommentsResponse;
-import com.car.sns.security.security.CarAppPrincipal;
+import com.car.sns.security.CarAppPrincipal;
 import com.car.sns.domain.board.service.ArticleService;
 import com.car.sns.domain.board.service.PaginationService;
 import lombok.RequiredArgsConstructor;
