@@ -1,12 +1,13 @@
 package com.car.sns.service;
 
-import com.car.sns.domain.Article;
-import com.car.sns.domain.ArticleComment;
-import com.car.sns.dto.ArticleCommentDto;
-import com.car.sns.dto.UserAccountDto;
-import com.car.sns.repository.ArticleCommentRepository;
-import com.car.sns.repository.ArticleRepository;
-import com.car.sns.repository.UserAccountRepository;
+import com.car.sns.domain.comment.service.ArticleCommentService;
+import com.car.sns.domain.board.entity.Article;
+import com.car.sns.domain.comment.entity.ArticleComment;
+import com.car.sns.domain.comment.model.ArticleCommentDto;
+import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.domain.comment.repository.ArticleCommentRepository;
+import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.user.repository.UserAccountRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

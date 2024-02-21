@@ -1,7 +1,7 @@
 package com.car.sns.config;
 
-import com.car.sns.domain.UserAccount;
-import com.car.sns.repository.UserAccountRepository;
+import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.user.repository.UserAccountRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
