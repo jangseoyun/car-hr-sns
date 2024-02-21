@@ -17,7 +17,6 @@ import java.util.Set;
 @Table(name = "t_article",
         indexes = {
                 @Index(columnList = "title"),
-                @Index(columnList = "hashtag"),
                 @Index(columnList = "createdAt"),
                 @Index(columnList = "createdBy")
         })
@@ -38,10 +37,6 @@ public class Article extends AuditingFields {
             length = 10000)
     private String content;
 
-    @Setter
-    @Column(name = "hashtag")
-    private String hashtag;
-
     @ToString.Exclude
     @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article",
@@ -54,15 +49,14 @@ public class Article extends AuditingFields {
     @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
-    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content) {
         this.userAccount = userAccount;
         this.title = title;
         this.content = content;
-        this.hashtag = hashtag;
     }
 
-    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
-        return new Article(userAccount, title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content) {
+        return new Article(userAccount, title, content);
     }
 
     @Override

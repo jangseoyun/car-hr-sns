@@ -2,7 +2,7 @@ package com.car.sns.repository;
 
 import com.car.sns.domain.board.entity.Article;
 import com.car.sns.domain.user.entity.UserAccount;
-import com.car.sns.domain.comment.repository.ArticleCommentRepository;
+import com.car.sns.infrastructure.repository.ArticleCommentJpaRepository;
 import com.car.sns.domain.board.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,11 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
-    private final ArticleCommentRepository articleCommentRepository;
+    private final ArticleCommentJpaRepository articleCommentRepository;
 
     public JpaRepositoryTest(
             @Autowired  ArticleRepository articleRepository,
-            @Autowired ArticleCommentRepository articleCommentRepository)
+            @Autowired ArticleCommentJpaRepository articleCommentRepository)
     {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;

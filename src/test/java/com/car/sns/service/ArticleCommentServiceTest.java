@@ -6,7 +6,7 @@ import com.car.sns.domain.comment.entity.ArticleComment;
 import com.car.sns.domain.comment.model.ArticleCommentDto;
 import com.car.sns.domain.comment.service.read.ArticleCommentReadService;
 import com.car.sns.domain.user.model.UserAccountDto;
-import com.car.sns.domain.comment.repository.ArticleCommentRepository;
+import com.car.sns.infrastructure.repository.ArticleCommentJpaRepository;
 import com.car.sns.domain.board.repository.ArticleRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ class ArticleCommentServiceTest {
     @Mock
     private ArticleRepository articleRepository;
     @Mock
-    private ArticleCommentRepository articleCommentRepository;
+    private ArticleCommentJpaRepository articleCommentRepository;
 
     @Disabled("구현중")
     @DisplayName("게시글 ID로 조회시 관련 댓글을 반환한다")

@@ -1,4 +1,4 @@
-package com.car.sns.domain.board.type;
+package com.car.sns.domain.board.model.type;
 
 import lombok.Getter;
 
