@@ -34,7 +34,6 @@ public class ArticleWriteService implements ArticleManagementUseCase {
             if (articleModifyDto.createdBy() == authUsername) {
                 if (articleModifyDto.title() != null) {article.setTitle(articleModifyDto.title());}
                 if (articleModifyDto.content() != null) {article.setContent(articleModifyDto.content());}
-                if (articleModifyDto.hashtag() != null) {article.setHashtag(articleModifyDto.hashtag());}
             }
         } catch (EntityNotFoundException e) {
             log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", articleModifyDto);

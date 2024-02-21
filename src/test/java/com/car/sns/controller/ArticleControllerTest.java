@@ -4,7 +4,7 @@ import com.car.sns.application.usecase.ArticleReaderUseCase;
 import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.service.PaginationService;
-import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.user.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.controller.ArticleController;

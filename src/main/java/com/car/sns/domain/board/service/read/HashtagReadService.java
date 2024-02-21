@@ -2,7 +2,7 @@ package com.car.sns.domain.board.service.read;
 
 import com.car.sns.application.usecase.HashtagUseCase;
 import com.car.sns.domain.board.model.ArticleDto;
-import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.infrastructure.repository.HashtagJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class HashtagReadService implements HashtagUseCase {
 
-    private final ArticleRepository articleRepository;
+    private final HashtagJpaRepository hashtagJpaRepository;
 
     @Override
     public Page<ArticleDto> searchArticlesViaHashtag(String hashtagKeyword, Pageable pageable) {
@@ -26,12 +26,12 @@ public class HashtagReadService implements HashtagUseCase {
             return Page.empty(pageable);
         }
 
-        return articleRepository.findByHashtag(hashtagKeyword, pageable)
+        return hashtagJpaRepository.findByHashtag(hashtagKeyword, pageable)
                 .map(ArticleDto::from);
     }
 
     @Override
     public List<String> getHashtags() {
-        return articleRepository.findAllDistinctHashtag();
+        return hashtagJpaRepository.findAllDistinctHashtag();
     }
 }

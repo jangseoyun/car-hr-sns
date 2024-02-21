@@ -4,7 +4,7 @@ import com.car.sns.application.usecase.ArticleManagementUseCase;
 import com.car.sns.application.usecase.ArticleReaderUseCase;
 import com.car.sns.domain.board.entity.Article;
 import com.car.sns.domain.user.entity.UserAccount;
-import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import com.car.sns.domain.board.repository.ArticleRepository;

@@ -1,7 +1,7 @@
 package com.car.sns.application.usecase;
 
 import com.car.sns.domain.board.model.ArticleDto;
-import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.presentation.model.ArticleWithCommentDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

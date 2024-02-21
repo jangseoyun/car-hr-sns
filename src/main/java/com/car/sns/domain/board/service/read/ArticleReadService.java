@@ -1,8 +1,9 @@
 package com.car.sns.domain.board.service.read;
 
 import com.car.sns.application.usecase.ArticleReaderUseCase;
-import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.board.model.ArticleDto;
+import com.car.sns.infrastructure.repository.HashtagJpaRepository;
 import com.car.sns.presentation.model.ArticleWithCommentDto;
 import com.car.sns.domain.board.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleReadService implements ArticleReaderUseCase {
 
     private final ArticleRepository articleRepository;
+    private final HashtagJpaRepository hashtagJpaRepository;
 
     @Override
     public Page<ArticleDto> getAllOrSearchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
@@ -30,7 +32,7 @@ public class ArticleReadService implements ArticleReaderUseCase {
         return switch (searchType) {
             case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
-            case HASHTAG -> articleRepository.findByHashtag(searchKeyword, pageable).map(ArticleDto::from);
+            case HASHTAG -> hashtagJpaRepository.findByHashtag(searchKeyword, pageable).map(ArticleDto::from);
             case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
         };

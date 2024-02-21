@@ -1,7 +1,7 @@
-package com.car.sns.domain.comment.repository;
+package com.car.sns.infrastructure.repository;
 
 import com.car.sns.domain.comment.entity.ArticleComment;
-import com.car.sns.domain.QArticleComment;
+import com.car.sns.domain.comment.entity.QArticleComment;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +11,7 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface ArticleCommentRepository extends
-        JpaRepository<ArticleComment, Long>
+public interface ArticleCommentJpaRepository extends JpaRepository<ArticleComment, Long>
         , QuerydslPredicateExecutor<ArticleComment>
         , QuerydslBinderCustomizer<QArticleComment> {
 

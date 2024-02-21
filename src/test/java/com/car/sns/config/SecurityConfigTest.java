@@ -1,7 +1,7 @@
 package com.car.sns.config;
 
 import com.car.sns.domain.user.entity.UserAccount;
-import com.car.sns.domain.user.repository.UserAccountRepository;
+import com.car.sns.infrastructure.repository.UserAccountJpaRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
@@ -14,7 +14,7 @@ import static org.mockito.BDDMockito.given;
 @Import(SecurityConfig.class)
 public class SecurityConfigTest {
     @MockBean
-    private UserAccountRepository userAccountRepository;
+    private UserAccountJpaRepository userAccountRepository;
 
     @BeforeTestMethod
     public void SecuritySetup() {

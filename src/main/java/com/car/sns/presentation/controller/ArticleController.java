@@ -3,7 +3,7 @@ package com.car.sns.presentation.controller;
 import com.car.sns.application.usecase.ArticleManagementUseCase;
 import com.car.sns.application.usecase.ArticleReaderUseCase;
 import com.car.sns.application.usecase.PaginationUseCase;
-import com.car.sns.domain.board.type.SearchType;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.presentation.model.ArticleWithCommentDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import com.car.sns.presentation.model.response.ArticleResponse;

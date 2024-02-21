@@ -15,7 +15,6 @@ public record ArticleWithCommentDto(
         Set<ArticleCommentDto> articleCommentDtos,
         String title,
         String content,
-        String hashtag,
         LocalDateTime createdAt,
         String createdBy,
         LocalDateTime modifiedAt,
@@ -26,12 +25,11 @@ public record ArticleWithCommentDto(
                                            Set<ArticleCommentDto> articleCommentDtoSet,
                                            String title,
                                            String content,
-                                           String hashtag,
                                            LocalDateTime createAt,
                                            String createdBy,
                                            LocalDateTime modifiedAt,
                                            String modifiedBy) {
-        return new ArticleWithCommentDto(id, userAccountDto, articleCommentDtoSet, title, content, hashtag, createAt, createdBy, modifiedAt, modifiedBy);
+        return new ArticleWithCommentDto(id, userAccountDto, articleCommentDtoSet, title, content, createAt, createdBy, modifiedAt, modifiedBy);
     }
 
     public static ArticleWithCommentDto from(Article entity) {
@@ -43,7 +41,6 @@ public record ArticleWithCommentDto(
                         .collect(Collectors.toCollection(LinkedHashSet::new)),
                 entity.getTitle(),
                 entity.getContent(),
-                entity.getHashtag(),
                 entity.getCreatedAt(),
                 entity.getCreatedBy(),
                 entity.getModifiedAt(),

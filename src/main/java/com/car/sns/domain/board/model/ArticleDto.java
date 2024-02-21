@@ -13,17 +13,15 @@ public record ArticleDto(
         LocalDateTime createdAt,
         String createdBy,
         String title,
-        String content,
-        String hashtag
+        String content
 ) {
 
     public static ArticleDto of(UserAccountDto userAccountDto,
                                 LocalDateTime createdAt,
                                 String createdBy,
                                 String title,
-                                String content,
-                                String hashtag) {
-        return new ArticleDto(userAccountDto, createdAt, createdBy, title, content, hashtag);
+                                String content) {
+        return new ArticleDto(userAccountDto, createdAt, createdBy, title, content);
     }
 
     public static ArticleDto from(Article entity) {
@@ -32,12 +30,11 @@ public record ArticleDto(
                 entity.getCreatedAt(),
                 entity.getCreatedBy(),
                 entity.getTitle(),
-                entity.getContent(),
-                entity.getHashtag());
+                entity.getContent());
     }
 
     public Article toEntity() {
-        return Article.of(userAccountDto.toEntity(), title, content, hashtag);
+        return Article.of(userAccountDto.toEntity(), title, content);
     }
 
 }

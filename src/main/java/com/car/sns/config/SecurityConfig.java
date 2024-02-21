@@ -2,7 +2,7 @@ package com.car.sns.config;
 
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.security.CarAppPrincipal;
-import com.car.sns.domain.user.repository.UserAccountRepository;
+import com.car.sns.infrastructure.repository.UserAccountJpaRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -59,7 +59,7 @@ public class SecurityConfig {
     }*/
 
     @Bean
-    public UserDetailsService userDetailsService(UserAccountRepository userAccountRepository) {
+    public UserDetailsService userDetailsService(UserAccountJpaRepository userAccountRepository) {
         return username -> userAccountRepository.findByUserId(username)
                 .map(UserAccountDto::from)
                 .map(CarAppPrincipal::from)
