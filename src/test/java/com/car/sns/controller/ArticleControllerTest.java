@@ -166,8 +166,7 @@ class ArticleControllerTest {
                 LocalDateTime.now(),
                 "Kamilah",
                 "title",
-                "content",
-                "hashtag");
+                "content");
     }
 
     private ArticleWithCommentDto createdArticleWithCommentsDto() {
@@ -177,7 +176,6 @@ class ArticleControllerTest {
                 Set.of(),
                 "title",
                 "content",
-                "hashtag",
                 LocalDateTime.now(),
                 "seo",
                 LocalDateTime.now(),
