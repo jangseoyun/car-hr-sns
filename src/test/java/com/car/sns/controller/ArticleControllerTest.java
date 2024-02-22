@@ -1,10 +1,11 @@
 package com.car.sns.controller;
 
-import com.car.sns.application.usecase.ArticleReaderUseCase;
+import com.car.sns.application.usecase.ArticleManagementUseCase;
+import com.car.sns.application.usecase.PaginationUseCase;
 import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.domain.board.model.ArticleDto;
-import com.car.sns.domain.board.service.PaginationService;
 import com.car.sns.domain.board.model.type.SearchType;
+import com.car.sns.domain.board.service.read.ArticleReadService;
 import com.car.sns.domain.user.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.controller.ArticleController;
@@ -42,9 +43,11 @@ class ArticleControllerTest {
     private final MockMvc mockMvc;
 
     @MockBean
-    private ArticleReaderUseCase articleReaderUseCase;
+    private ArticleReadService articleReadService;
     @MockBean
-    private PaginationService paginationService;
+    private ArticleManagementUseCase articleManagementUseCase;
+    @MockBean
+    private PaginationUseCase paginationUseCase;
 
     public ArticleControllerTest(@Autowired MockMvc mockMvc) {
         this.mockMvc = mockMvc;
@@ -68,8 +71,8 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view] read - 게시글 리스트 (게시판) 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleView() throws Exception {
-        given(articleReaderUseCase.getAllOrSearchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
-        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
+        given(articleReadService.getAllOrSearchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationUseCase.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/index"))
                 .andExpect(status().isOk())
@@ -78,8 +81,8 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"))
                 .andExpect(model().attributeExists("paginationBarNumbers"));
 
-        then(articleReaderUseCase).should().getAllOrSearchArticles(eq(null), eq(null), any(Pageable.class));
-        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+        then(articleReadService).should().getAllOrSearchArticles(eq(null), eq(null), any(Pageable.class));
+        then(paginationUseCase).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
     @Test
@@ -89,8 +92,8 @@ class ArticleControllerTest {
         SearchType searchTitle = SearchType.TITLE;
         String searchKeyword = "Donec";
 
-        given(articleReaderUseCase.getAllOrSearchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class))).willReturn(Page.empty());
-        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
+        given(articleReadService.getAllOrSearchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationUseCase.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/index")
                         .queryParam("searchType", searchTitle.name())
@@ -102,8 +105,8 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"))
                 .andExpect(model().attributeExists("searchTypes"));
 
-        then(articleReaderUseCase).should().getAllOrSearchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class));
-        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+        then(articleReadService).should().getAllOrSearchArticles(eq(searchTitle), eq(searchKeyword), any(Pageable.class));
+        then(paginationUseCase).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
     @Test
@@ -114,7 +117,7 @@ class ArticleControllerTest {
     @DisplayName("[view] read - 게시글 상세 페이지 - 정상 호출")
     void givenNothing_whenRequestingArticlesView_thenReturnArticleDetail() throws Exception {
         Long articleId = 1L;
-        given(articleReaderUseCase.getArticleDetailWithComments(articleId)).willReturn(createdArticleWithCommentsDto());
+        given(articleReadService.getArticleDetailWithComments(articleId)).willReturn(createdArticleWithCommentsDto());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/articles/detail/" + articleId))
                 .andExpect(status().isOk())
@@ -122,7 +125,7 @@ class ArticleControllerTest {
                 .andExpect(view().name("features-posts-detail"))
                 .andExpect(model().attributeExists("articleDetail"));
 
-        then(articleReaderUseCase).should().getArticleDetailWithComments(articleId);
+        then(articleReadService).should().getArticleDetailWithComments(articleId);
     }
 
     @Disabled("구현 중")
