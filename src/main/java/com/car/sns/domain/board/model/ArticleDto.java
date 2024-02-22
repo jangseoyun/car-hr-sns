@@ -24,6 +24,18 @@ public record ArticleDto(
         return new ArticleDto(userAccountDto, createdAt, createdBy, title, content);
     }
 
+    public static ArticleDto of(UserAccountDto userAccountDto,
+                                CreateArticleInfoDto createArticleInfoDto)
+    {
+        return new ArticleDto(
+                userAccountDto,
+                null,
+                userAccountDto.userId(),
+                createArticleInfoDto.title(),
+                createArticleInfoDto.content()
+        );
+    }
+
     public static ArticleDto from(Article entity) {
         return new ArticleDto(
                 UserAccountDto.from(entity.getUserAccount()),
