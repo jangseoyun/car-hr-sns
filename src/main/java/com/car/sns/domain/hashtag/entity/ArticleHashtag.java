@@ -1,7 +1,6 @@
-package com.car.sns.domain.hashtag;
+package com.car.sns.domain.hashtag.entity;
 
 import com.car.sns.domain.board.entity.Article;
-import com.car.sns.domain.hashtag.entity.Hashtag;
 import jakarta.persistence.*;
 import lombok.*;
 

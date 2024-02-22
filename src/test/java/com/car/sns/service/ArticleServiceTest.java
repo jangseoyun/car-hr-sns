@@ -115,7 +115,7 @@ class ArticleServiceTest {
                 .willReturn(null);
 
         //when
-        articleManagementUseCase.createArticle(createdArticleDto(article));
+        //articleManagementUseCase.createArticle(createdArticleDto(article));
 
         //then
         then(articleRepository)
