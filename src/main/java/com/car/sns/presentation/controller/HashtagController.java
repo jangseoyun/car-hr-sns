@@ -33,7 +33,7 @@ public class HashtagController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map) {
         //TODO: controller에서는 간단히 사용자 요청을 전달하는 목적으로 많은 로직이 들어가서는 안된다
-        Page<ArticleResponse> articleResponses = hashtagUseCase.searchArticlesViaHashtag(hashtagKeyword, pageable).map(ArticleResponse::from);
+        Page<ArticleResponse> articleResponses = hashtagUseCase.searchContainHashtagName(hashtagKeyword, pageable).map(ArticleResponse::from);
         List<Integer> paginationBarNumber = paginationUseCase.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
         List<String> hashtags = hashtagUseCase.getHashtags();
 

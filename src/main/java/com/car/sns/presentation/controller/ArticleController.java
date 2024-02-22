@@ -3,9 +3,11 @@ package com.car.sns.presentation.controller;
 import com.car.sns.application.usecase.ArticleManagementUseCase;
 import com.car.sns.application.usecase.ArticleReaderUseCase;
 import com.car.sns.application.usecase.PaginationUseCase;
+import com.car.sns.domain.board.model.CreateArticleInfoDto;
 import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.presentation.model.ArticleWithCommentDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
+import com.car.sns.presentation.model.request.ArticleRequest;
 import com.car.sns.presentation.model.response.ArticleResponse;
 import com.car.sns.presentation.model.response.ArticleWithCommentsResponse;
 import com.car.sns.security.CarAppPrincipal;
@@ -73,17 +75,23 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{articleId}")
-    public String removeArticle(@PathVariable Long articleId)
-    {
+    public String removeArticle(@PathVariable Long articleId) {
         articleManagementUseCase.deleteArticle(articleId);
         return "redirect:/articles/index";
     }
 
     @PutMapping("")
     public String modifyPostContent(@AuthenticationPrincipal CarAppPrincipal carAppPrincipal,
-                                    ArticleModifyRequest articleModifyRequest)
-    {
+                                    ArticleModifyRequest articleModifyRequest) {
         articleManagementUseCase.updateArticle(articleModifyRequest, carAppPrincipal.getUsername());
         return "redirect:/articles/detail/" + articleModifyRequest.articleId();
+    }
+
+    @PostMapping("/create")
+    public String createArticlePost(@AuthenticationPrincipal CarAppPrincipal carAppPrincipal,
+                                    ArticleRequest articleRequest) {
+        articleManagementUseCase.createArticle(CreateArticleInfoDto.of(articleRequest, carAppPrincipal.getUsername()));
+
+        return "";
     }
 }
