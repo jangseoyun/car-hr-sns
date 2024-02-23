@@ -8,6 +8,12 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
+  application.name: ${VAULT_NAME}
+  cloud.vault:
+    scheme: http
+    authentication: ${AUTHENTICATION_TYPE}
+    token: ${SECRET_KEY}
+  config.import: vault://
   datasource:
     url: ${URL}
     username: ${USERNAME}
