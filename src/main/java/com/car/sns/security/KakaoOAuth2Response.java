@@ -1,5 +1,7 @@
 package com.car.sns.security;
 
+import com.car.sns.domain.user.entity.UserAccount;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -58,6 +60,17 @@ public record KakaoOAuth2Response(
                 (Map<String, Object>) attributes.get("properties"),
                 KakaoAccount.from((Map<String, Object>) attributes.get("kakao_account"))
         );
+    }
+
+    public UserAccount toUserAccount(String password, String memo) {
+        return UserAccount.of(
+                nickname(),
+                password,
+                this.email(),
+                this.nickname(),
+                memo,
+                nickname()
+                );
     }
 
     public String email() {

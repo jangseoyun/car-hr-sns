@@ -48,16 +48,24 @@ public class UserAccount extends AuditingFields {
     @Column(name = "memo")
     private String memo;
 
-    private UserAccount(String userId, String userPassword, String email, String nickname, String memo) {
+    @Column(name = "kakao_createdBy")
+    private String oAuthCreatedBy;
+
+    private UserAccount(String userId, String userPassword, String email, String nickname, String memo, String oAuthCreatedBy) {
         this.userId = userId;
         this.userPassword = userPassword;
         this.email = email;
         this.nickname = nickname;
         this.memo = memo;
+        this.oAuthCreatedBy = oAuthCreatedBy;
+    }
+
+    public static UserAccount of(String userId, String userPassword, String email, String nickname, String memo, String oAuthCreatedBy) {
+        return new UserAccount(userId, userPassword, email, nickname, memo, oAuthCreatedBy);
     }
 
     public static UserAccount of(String userId, String userPassword, String email, String nickname, String memo) {
-        return new UserAccount(userId, userPassword, email, nickname, memo);
+        return UserAccount.of(userId, userPassword, email, nickname, memo, null);
     }
 
     @Override
