@@ -62,13 +62,13 @@ public record KakaoOAuth2Response(
         );
     }
 
-    public UserAccount toUserAccount(String password, String memo) {
+    public UserAccount toUserAccount(String dummyPassword) {
         return UserAccount.of(
                 nickname(),
-                password,
+                dummyPassword,
                 this.email(),
                 this.nickname(),
-                memo,
+                null,
                 nickname()
                 );
     }

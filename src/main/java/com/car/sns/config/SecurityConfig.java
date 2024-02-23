@@ -1,8 +1,9 @@
 package com.car.sns.config;
 
-import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.domain.user.service.UserAccountReadService;
+import com.car.sns.domain.user.service.UserAccountWriteService;
 import com.car.sns.security.CarAppPrincipal;
-import com.car.sns.infrastructure.repository.UserAccountJpaRepository;
+import com.car.sns.security.KakaoOAuth2Response;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +14,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
+                                                   OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService
+    ) throws Exception {
+
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
@@ -49,6 +57,11 @@ public class SecurityConfig {
                                 response.sendRedirect("/login"))
                         // 로그아웃 시 쿠키 삭제 설정 (예: "remember-me" 쿠키 삭제)
                         .deleteCookies("remember-me")
+                )
+                .oauth2Login(oAuth -> oAuth
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService)
+                        )
                 ).build();
     }
 
@@ -59,11 +72,37 @@ public class SecurityConfig {
     }*/
 
     @Bean
-    public UserDetailsService userDetailsService(UserAccountJpaRepository userAccountRepository) {
-        return username -> userAccountRepository.findByUserId(username)
-                .map(UserAccountDto::from)
+    public UserDetailsService userDetailsService(UserAccountReadService userAccountReadService) {
+        return username -> userAccountReadService.searchUser(username)
                 .map(CarAppPrincipal::from)
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자 입니다."));
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService(
+            UserAccountReadService userAccountReadService,
+            UserAccountWriteService userAccountWriteService,
+            PasswordEncoder passwordEncoder
+    ) {
+        final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+        return userRequest -> {
+            OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
+            KakaoOAuth2Response kakaoOAuth2Response = KakaoOAuth2Response.from(oAuth2User.getAttributes());
+
+            String registrationId = userRequest.getClientRegistration().getRegistrationId();// "kakao"
+            String providerId = String.valueOf(kakaoOAuth2Response.id());
+            String username = registrationId + "_" + providerId;
+            //애플리케이션에서 비밀번호를 받아 주는 것이 아니라 전달할 이유는 없지만 entity 설계에 pw가 null 허용이 안되기 때문에 임의로 보내줌
+            String dummyPassword = passwordEncoder.encode("{bcrypt}dummy");
+
+            //DB에 user가 있으면 반환, 없으면 저장
+            return userAccountReadService.searchUser(username)
+                    .map(CarAppPrincipal::from)
+                    .orElseGet(() -> CarAppPrincipal.from(
+                            userAccountWriteService.saveUserAccount(kakaoOAuth2Response, dummyPassword))
+                    );
+        };
     }
 
     @Bean

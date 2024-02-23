@@ -17,8 +17,8 @@ public class UserAccountWriteService {
 
     private final UserAccountJpaRepository userAccountJpaRepository;
 
-    public UserAccountDto saveUserAccount(KakaoOAuth2Response kakaoOAuth2Response, String password, String memo) {
-        UserAccount userAccount = kakaoOAuth2Response.toUserAccount(password, memo);
+    public UserAccountDto saveUserAccount(KakaoOAuth2Response kakaoOAuth2Response, String dummyPassword) {
+        UserAccount userAccount = kakaoOAuth2Response.toUserAccount(dummyPassword);
         return UserAccountDto.from(userAccountJpaRepository.save(userAccount));
     }
 }
