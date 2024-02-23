@@ -24,8 +24,8 @@ public class ArticleCommentController {
                                         @AuthenticationPrincipal CarAppPrincipal carAppPrincipal
     ) {
         log.info("request: {}", articleCommentRequest.toString());
-        UserAccountDto userAccountDto = UserAccountDto.of(null, "Uno", "Uno", "2343", "uno@email.com", "nickname", null);
-        articleCommentService.saveArticleComment(articleCommentRequest.toDto(userAccountDto));
+
+        articleCommentService.saveArticleComment(articleCommentRequest.toDto(carAppPrincipal));
         return "redirect:/articles/detail/" + articleCommentRequest.articleId();
     }
 

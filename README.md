@@ -19,6 +19,7 @@ ARTICLE ||--o{ ARTICLE_COMMENT : is
         bigint article_comment_id PK "댓글 PK"
         bigint article_id FK "게시글 ID"
         bigint user_account_id FK "사용자 계정 PK"
+        bigint parent_comment_id "부모 댓글 id"
         varchar(65535) content "내용"
         datetime created_at "작성일"
         varchar(100) created_by "작성자"

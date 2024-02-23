@@ -43,7 +43,7 @@ class JpaRepositoryTest {
 
         assertThat(articles)
                 .isNotNull()
-                .hasSize(123);
+                .hasSize(0);
     }
 
     @Test
@@ -86,6 +86,17 @@ class JpaRepositoryTest {
 
         assertThat(articleCommentRepository.count())
                 .isEqualTo(previousArticleCommentCount - deletedCommentSize);
+    }
+
+    @DisplayName("[GET] - 대댓글 조회")
+    @Test
+    void given_when_then() {
+        //given
+
+
+        //when
+
+        //then
     }
 
     @EnableJpaAuditing

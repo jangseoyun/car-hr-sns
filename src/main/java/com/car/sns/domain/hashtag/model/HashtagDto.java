@@ -14,6 +14,10 @@ public record HashtagDto(
         return new HashtagDto(id, hashtagName);
     }
 
+    public static HashtagDto of(String hashtagName) {
+        return HashtagDto.of(null, hashtagName);
+    }
+
     public static HashtagDto toDto(Long id, String hashtagName) {
         return new HashtagDto(id, hashtagName);
     }
