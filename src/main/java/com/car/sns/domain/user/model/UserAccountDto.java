@@ -1,6 +1,8 @@
 package com.car.sns.domain.user.model;
 
 import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.security.CarAppPrincipal;
+import com.car.sns.security.KakaoOAuth2Response;
 
 import java.time.LocalDateTime;
 
