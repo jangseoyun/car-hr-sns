@@ -1,15 +1,12 @@
 package com.car.sns.domain.user.service;
 
-import com.car.sns.infrastructure.repository.UserAccountJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExecutionCondition;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("사용자 등록 서비스 테스트")
 @ExtendWith(MockitoExtension.class)

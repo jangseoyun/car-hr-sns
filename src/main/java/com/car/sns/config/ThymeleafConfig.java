@@ -9,7 +9,6 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 
 @Configuration
 public class ThymeleafConfig {
-
     @Bean
     public SpringResourceTemplateResolver thymeleafTemplateResolver(
             SpringResourceTemplateResolver defaultTemplateResolver,
@@ -19,7 +18,6 @@ public class ThymeleafConfig {
 
         return defaultTemplateResolver;
     }
-
 
     @RequiredArgsConstructor
     @Getter

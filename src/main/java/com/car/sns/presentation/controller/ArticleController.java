@@ -1,14 +1,15 @@
 package com.car.sns.presentation.controller;
 
-import com.car.sns.application.usecase.ArticleManagementUseCase;
-import com.car.sns.application.usecase.ArticleReaderUseCase;
+import com.car.sns.application.usecase.board.ArticleManagementUseCase;
+import com.car.sns.application.usecase.board.ArticleReaderUseCase;
 import com.car.sns.application.usecase.PaginationUseCase;
+import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.model.CreateArticleInfoDto;
 import com.car.sns.domain.board.model.type.SearchType;
-import com.car.sns.presentation.model.ArticleWithCommentDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import com.car.sns.presentation.model.request.ArticleRequest;
-import com.car.sns.presentation.model.response.ArticleResponse;
+import com.car.sns.presentation.model.response.ArticleDetailWithCommentResponse;
+import com.car.sns.presentation.model.response.ArticlePageResponse;
 import com.car.sns.presentation.model.response.ArticleWithCommentsResponse;
 import com.car.sns.security.CarAppPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -17,81 +18,98 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/articles")
-@Controller
+@RestController
 public class ArticleController {
 
     private final ArticleReaderUseCase articleUseCase;
     private final ArticleManagementUseCase articleManagementUseCase;
     private final PaginationUseCase paginationUseCase;
 
-    @GetMapping("/create")
-    public String getCreatePostPage() {
-        return "features-post-create";
-    }
-
     /**
      * 게시글 목록 Index
      * searchType, searchKeyword 존재 X : 게시글 전체 조회
      * searchType, searchKeyword 존재 O : 타입/키워드를 필터링으로 해당 게시글 조회
      */
-    @GetMapping("/index")
-    public String index(
+    @GetMapping("")
+    public ResponseEntity<ArticlePageResponse> getAllOrSearchArticles(
             @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchKeyword,
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            ModelMap map
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
-        Page<ArticleResponse> articleResponses = articleUseCase.getAllOrSearchArticles(searchType, searchKeyword, pageable)
-                .map(ArticleResponse::from);
-        List<Integer> paginationBarNumber = paginationUseCase.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
+        Page<ArticleDto> articles = articleUseCase.getAllOrSearchArticles(searchType, searchKeyword, pageable);
+        List<Integer> paginationBarNumbers = paginationUseCase.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+        log.info("article response: {}", articles.getContent());
 
-        map.addAttribute("articles", articleResponses);
-        map.addAttribute("paginationBarNumbers", paginationBarNumber);
-        map.addAttribute("searchTypes", SearchType.values());
-
-        log.info("article response: {}", articleResponses.getContent());
-        return "features-posts";
+        return ResponseEntity
+                .ok()
+                .body(ArticlePageResponse.of(articles, paginationBarNumbers));
     }
 
+    /**
+     * 게시글(articleId)의 상세 정보 반환
+     * 게시글 댓글 리스트 반환
+     */
     @GetMapping("/detail/{articleId}")
-    public String readArticleDetail(@PathVariable Long articleId, ModelMap map
-    ) {
-        ArticleWithCommentDto getArticleWithComments = articleUseCase.getArticleDetailWithComments(articleId);
-        map.addAttribute("articleDetail", ArticleWithCommentsResponse.from(getArticleWithComments));
+    public ResponseEntity<ArticleDetailWithCommentResponse> readArticleDetail(@PathVariable Long articleId,
+                                                                              @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
+    {
+        ArticleDetailWithCommentResponse articleDetailWithCommentResponse = articleUseCase.getArticleDetailWithComments(articleId);
 
-        log.info("detail response: {}", ArticleWithCommentsResponse.from(getArticleWithComments));
-        return "features-posts-detail";
+        log.info("detail response: {}", ArticleWithCommentsResponse.from(articleDetailWithCommentResponse));
+        return ResponseEntity
+                .ok()
+                .body(articleDetailWithCommentResponse);
     }
 
+    /**
+     * 게시글 삭제
+     * TODO: 소프트 삭제 구현 예정
+     */
     @DeleteMapping("/{articleId}")
-    public String removeArticle(@PathVariable Long articleId) {
+    public ModelAndView removeArticle(@PathVariable Long articleId,
+                                      @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
+    {
         articleManagementUseCase.deleteArticle(articleId);
-        return "redirect:/articles/index";
+
+        ModelAndView redirect = new ModelAndView("redirect:/articles");
+        redirect.addObject("articleId", articleId);
+        return redirect;
     }
 
     @PutMapping("")
-    public String modifyPostContent(@AuthenticationPrincipal CarAppPrincipal carAppPrincipal,
-                                    ArticleModifyRequest articleModifyRequest) {
+    public ModelAndView modifyPostContent(@RequestBody ArticleModifyRequest articleModifyRequest,
+                                          @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
+    {
         articleManagementUseCase.updateArticle(articleModifyRequest, carAppPrincipal.getUsername());
-        return "redirect:/articles/detail/" + articleModifyRequest.articleId();
+
+        ModelAndView redirect = new ModelAndView("redirect:/articles/detail/");
+        redirect.addObject(articleModifyRequest.articleId());
+        return redirect;
     }
 
+    /**
+     * TODO: 게시글 생성 후 생성된 게시글 Response 보내주도록 리팩토링
+     */
     @PostMapping("/create")
-    public String createArticlePost(@AuthenticationPrincipal CarAppPrincipal carAppPrincipal,
-                                    ArticleRequest articleRequest) {
-        articleManagementUseCase.createArticle(CreateArticleInfoDto.of(articleRequest, carAppPrincipal.getUsername()));
+    public ModelAndView createArticlePost(@RequestBody ArticleRequest articleRequest,
+                                          @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
+    {
+        Long savedArticleId = articleManagementUseCase
+                .createArticle(CreateArticleInfoDto.of(articleRequest, carAppPrincipal.getUsername()));
 
-        return "";
+        ModelAndView redirect = new ModelAndView("redirect:/articles/detail/");
+        redirect.addObject("articleId", savedArticleId);
+        return redirect;
     }
 }

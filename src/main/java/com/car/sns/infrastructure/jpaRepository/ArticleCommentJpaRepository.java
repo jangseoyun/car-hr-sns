@@ -1,6 +1,6 @@
-package com.car.sns.infrastructure.repository;
+package com.car.sns.infrastructure.jpaRepository;
 
-import com.car.sns.domain.comment.entity.ArticleComment;
+import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.domain.comment.entity.QArticleComment;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;

@@ -1,11 +1,11 @@
 package com.car.sns.domain.hashtag.model;
 
-import com.car.sns.domain.hashtag.entity.ArticleHashtag;
+import com.car.sns.domain.hashtag.model.entity.ArticleHashtag;
 
 import java.time.LocalDateTime;
 
 /**
- * DTO for {@link com.car.sns.domain.hashtag.entity.ArticleHashtag}
+ * DTO for {@link ArticleHashtag}
  */
 public record ArticleHashtagDto(
         LocalDateTime articleCreatedAt,

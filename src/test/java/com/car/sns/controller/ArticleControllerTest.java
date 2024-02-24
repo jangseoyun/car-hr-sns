@@ -1,15 +1,15 @@
 package com.car.sns.controller;
 
-import com.car.sns.application.usecase.ArticleManagementUseCase;
+import com.car.sns.application.usecase.board.ArticleManagementUseCase;
 import com.car.sns.application.usecase.PaginationUseCase;
 import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.board.service.read.ArticleReadService;
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.controller.ArticleController;
-import com.car.sns.presentation.model.ArticleWithCommentDto;
+import com.car.sns.presentation.model.response.ArticleDetailWithCommentResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -172,8 +172,8 @@ class ArticleControllerTest {
                 "content");
     }
 
-    private ArticleWithCommentDto createdArticleWithCommentsDto() {
-        return ArticleWithCommentDto.of(
+    private ArticleDetailWithCommentResponse createdArticleWithCommentsDto() {
+        return ArticleDetailWithCommentResponse.of(
                 1L,
                 createUserAccountDto(createdUserAccount()),
                 Set.of(),

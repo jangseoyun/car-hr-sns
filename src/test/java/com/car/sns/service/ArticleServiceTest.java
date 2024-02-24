@@ -1,9 +1,9 @@
 package com.car.sns.service;
 
-import com.car.sns.application.usecase.ArticleManagementUseCase;
-import com.car.sns.application.usecase.ArticleReaderUseCase;
-import com.car.sns.domain.board.entity.Article;
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.application.usecase.board.ArticleManagementUseCase;
+import com.car.sns.application.usecase.board.ArticleReaderUseCase;
+import com.car.sns.domain.board.model.entity.Article;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;

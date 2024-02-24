@@ -1,6 +1,6 @@
 package com.car.sns.security;
 
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.user.model.entity.UserAccount;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

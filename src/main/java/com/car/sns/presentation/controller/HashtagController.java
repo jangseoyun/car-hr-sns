@@ -1,17 +1,17 @@
 package com.car.sns.presentation.controller;
 
-import com.car.sns.application.usecase.HashtagUseCase;
+import com.car.sns.application.usecase.hashtag.HashtagUseCase;
 import com.car.sns.application.usecase.PaginationUseCase;
-import com.car.sns.domain.board.model.type.SearchType;
-import com.car.sns.presentation.model.response.ArticleResponse;
+import com.car.sns.domain.board.model.ArticleDto;
+import com.car.sns.presentation.model.response.ArticlePageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,21 +27,21 @@ public class HashtagController {
     private final HashtagUseCase hashtagUseCase;
     private final PaginationUseCase paginationUseCase;
 
+    /**
+     * 해시태그로 검색하여 해당하는 게시글 반환
+     */
     @GetMapping("/search")
-    public String searchHashtag(
+    public ResponseEntity<ArticlePageResponse> searchHashtag(
             @RequestParam(required = false) String hashtagKeyword,
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            ModelMap map) {
-        //TODO: controller에서는 간단히 사용자 요청을 전달하는 목적으로 많은 로직이 들어가서는 안된다
-        Page<ArticleResponse> articleResponses = hashtagUseCase.searchContainHashtagName(hashtagKeyword, pageable).map(ArticleResponse::from);
-        List<Integer> paginationBarNumber = paginationUseCase.getPaginationBarNumbers(pageable.getPageNumber(), articleResponses.getTotalPages());
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable)
+    {
+        //TODO: hashtagUseCase 하나의 호출로 Response를 만들어 보낼 수 있는지 고려할 것
+        Page<ArticleDto> articles = hashtagUseCase.searchContainHashtagName(hashtagKeyword, pageable);
+        List<Integer> paginationBarNumber = paginationUseCase.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
         List<String> hashtags = hashtagUseCase.getHashtags();
 
-        map.addAttribute("articles", articleResponses);
-        map.addAttribute("hashtags", hashtags);
-        map.addAttribute("paginationBarNumbers", paginationBarNumber);
-        map.addAttribute("searchType", SearchType.HASHTAG);
-
-        return "features-posts";
+        return ResponseEntity
+                .ok()
+                .body(ArticlePageResponse.of(articles, paginationBarNumber, hashtags));
     }
 }

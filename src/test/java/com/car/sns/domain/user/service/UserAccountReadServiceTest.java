@@ -1,15 +1,14 @@
 package com.car.sns.domain.user.service;
 
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
-import com.car.sns.infrastructure.repository.UserAccountJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
