@@ -1,26 +1,25 @@
 package com.car.sns.domain.board.service;
 
-import com.car.sns.application.usecase.ArticleManagementUseCase;
-import com.car.sns.domain.board.entity.Article;
+import com.car.sns.application.usecase.board.ArticleManagementUseCase;
+import com.car.sns.domain.board.model.entity.Article;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.model.CreateArticleInfoDto;
 import com.car.sns.domain.board.repository.ArticleRepository;
-import com.car.sns.domain.hashtag.service.HashtagReadService;
 import com.car.sns.domain.hashtag.service.HashtagWriteService;
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
-import com.car.sns.infrastructure.repository.UserAccountJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ArticleWriteService implements ArticleManagementUseCase {
 
     private final ArticleRepository articleRepository;
@@ -51,14 +50,15 @@ public class ArticleWriteService implements ArticleManagementUseCase {
     }
 
     @Override
-    public void createArticle(CreateArticleInfoDto createArticleInfoDto) {
+    public Long createArticle(CreateArticleInfoDto createArticleInfoDto) {
         //article에 있는 해시태그 분리해서 저장
         UserAccount accessUser = userAccountJpaRepository.findByUserId(createArticleInfoDto.username())
                 .orElseThrow( () -> new EntityNotFoundException("잘못된 사용자 접속입니다."));
 
         ArticleDto articleDto = ArticleDto.of(UserAccountDto.from(accessUser), createArticleInfoDto);
-        articleRepository.save(articleDto.toEntity());
+        Long savedArticleId = articleRepository.save(articleDto.toEntity()).getId();
 
         hashtagWriteService.renewHashtagsFromContent(articleDto.content());
+        return savedArticleId;
     }
 }

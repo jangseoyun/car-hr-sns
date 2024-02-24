@@ -1,8 +1,8 @@
-package com.car.sns.domain.comment.entity;
+package com.car.sns.domain.comment.model.entity;
 
 import com.car.sns.common.AuditingFields;
-import com.car.sns.domain.board.entity.Article;
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.board.model.entity.Article;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -63,9 +63,10 @@ public class ArticleComment extends AuditingFields {
         return new ArticleComment(userAccount, null, article, content);
     }
 
-    public void addChildComment(ArticleComment childComment) {
+    public Long addChildComment(ArticleComment childComment) {
         childComment.updateParentCommentId(this.id);
         this.getChildComments().add(childComment);
+        return childComment.id;
     }
 
     private void updateParentCommentId(Long parentCommentId) {

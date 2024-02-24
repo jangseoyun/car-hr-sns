@@ -1,4 +1,4 @@
-package com.car.sns.domain.hashtag.entity;
+package com.car.sns.domain.hashtag.model.entity;
 
 import com.car.sns.common.AuditingFields;
 import jakarta.persistence.*;

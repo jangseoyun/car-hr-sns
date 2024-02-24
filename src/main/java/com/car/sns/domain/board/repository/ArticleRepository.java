@@ -1,6 +1,6 @@
 package com.car.sns.domain.board.repository;
 
-import com.car.sns.domain.board.entity.Article;
+import com.car.sns.domain.board.model.entity.Article;
 import com.car.sns.domain.board.entity.QArticle;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;

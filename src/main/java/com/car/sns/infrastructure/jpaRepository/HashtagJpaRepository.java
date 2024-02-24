@@ -1,7 +1,7 @@
-package com.car.sns.infrastructure.repository;
+package com.car.sns.infrastructure.jpaRepository;
 
 import com.car.sns.domain.board.repository.querydsl.HashtagRepositoryCustom;
-import com.car.sns.domain.hashtag.entity.Hashtag;
+import com.car.sns.domain.hashtag.model.entity.Hashtag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

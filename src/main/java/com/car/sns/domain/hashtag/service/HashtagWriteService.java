@@ -1,7 +1,8 @@
 package com.car.sns.domain.hashtag.service;
 
-import com.car.sns.domain.hashtag.entity.Hashtag;
-import com.car.sns.infrastructure.repository.HashtagJpaRepository;
+import com.car.sns.domain.hashtag.model.entity.Hashtag;
+import com.car.sns.domain.hashtag.service.read.HashtagReadService;
+import com.car.sns.infrastructure.jpaRepository.HashtagJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

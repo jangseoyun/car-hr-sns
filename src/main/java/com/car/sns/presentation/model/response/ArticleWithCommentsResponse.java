@@ -1,7 +1,6 @@
 package com.car.sns.presentation.model.response;
 
 import com.car.sns.domain.comment.model.ArticleCommentDto;
-import com.car.sns.presentation.model.ArticleWithCommentDto;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -23,7 +22,7 @@ public record ArticleWithCommentsResponse(
         return new ArticleWithCommentsResponse(articleCommentDtos, title, content, createdAt, email, nickname);
     }
 
-    public static ArticleWithCommentsResponse from(ArticleWithCommentDto dto) {
+    public static ArticleWithCommentsResponse from(ArticleDetailWithCommentResponse dto) {
         return new ArticleWithCommentsResponse(
                 dto.articleCommentDtos(),
                 dto.title(),

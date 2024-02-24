@@ -1,7 +1,8 @@
 package com.car.sns.domain.hashtag.service;
 
-import com.car.sns.domain.hashtag.ArticleHashtagJpaRepository;
-import com.car.sns.infrastructure.repository.HashtagJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.ArticleHashtagJpaRepository;
+import com.car.sns.domain.hashtag.service.read.HashtagReadService;
+import com.car.sns.infrastructure.jpaRepository.HashtagJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

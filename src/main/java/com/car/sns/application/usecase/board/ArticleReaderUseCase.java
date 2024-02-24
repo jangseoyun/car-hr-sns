@@ -1,8 +1,8 @@
-package com.car.sns.application.usecase;
+package com.car.sns.application.usecase.board;
 
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.model.type.SearchType;
-import com.car.sns.presentation.model.ArticleWithCommentDto;
+import com.car.sns.presentation.model.response.ArticleDetailWithCommentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +19,7 @@ public interface ArticleReaderUseCase {
     /**
      * 게시글 단건 조회로 게시글에 포함된 댓글 리스트 조회
      */
-    ArticleWithCommentDto getArticleDetailWithComments(Long articleId);
+    ArticleDetailWithCommentResponse getArticleDetailWithComments(Long articleId);
 
     /**
      * 댓글을 포함하지 않는 게시글 단건조회

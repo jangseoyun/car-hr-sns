@@ -1,4 +1,4 @@
-package com.car.sns.domain.user.entity;
+package com.car.sns.domain.user.model.entity;
 
 import com.car.sns.common.AuditingFields;
 import jakarta.persistence.*;

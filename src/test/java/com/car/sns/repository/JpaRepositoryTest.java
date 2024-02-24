@@ -1,8 +1,8 @@
 package com.car.sns.repository;
 
-import com.car.sns.domain.board.entity.Article;
-import com.car.sns.domain.user.entity.UserAccount;
-import com.car.sns.infrastructure.repository.ArticleCommentJpaRepository;
+import com.car.sns.domain.board.model.entity.Article;
+import com.car.sns.domain.user.model.entity.UserAccount;
+import com.car.sns.infrastructure.jpaRepository.ArticleCommentJpaRepository;
 import com.car.sns.domain.board.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

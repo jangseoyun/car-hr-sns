@@ -1,6 +1,6 @@
 package com.car.sns.domain.board.repository.querydsl;
 
-import com.car.sns.domain.hashtag.entity.Hashtag;
+import com.car.sns.domain.hashtag.model.entity.Hashtag;
 import com.car.sns.domain.hashtag.entity.QHashtag;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 

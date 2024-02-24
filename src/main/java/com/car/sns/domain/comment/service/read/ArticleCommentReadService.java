@@ -11,8 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ArticleCommentReadService {
-    @Transactional(readOnly = true)
-    public List<ArticleCommentDto> searchArticleComment(long articleId) {
+    public List<ArticleCommentDto> searchArticleComment(Long userAccountId) {
+        //TODO: 댓글 작성자로 검색할 수 있또록 구현
         return List.of();
     }
 }

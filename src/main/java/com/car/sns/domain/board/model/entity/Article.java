@@ -1,8 +1,8 @@
-package com.car.sns.domain.board.entity;
+package com.car.sns.domain.board.model.entity;
 
-import com.car.sns.domain.comment.entity.ArticleComment;
+import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.common.AuditingFields;
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import jakarta.persistence.*;
 import lombok.*;
 

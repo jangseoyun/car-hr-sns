@@ -1,6 +1,6 @@
 package com.car.sns.domain.board.model;
 
-import com.car.sns.domain.board.entity.Article;
+import com.car.sns.domain.board.model.entity.Article;
 import com.car.sns.domain.user.model.UserAccountDto;
 
 import java.time.LocalDateTime;

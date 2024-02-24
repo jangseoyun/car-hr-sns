@@ -1,9 +1,9 @@
 package com.car.sns.domain.hashtag.model;
 
-import com.car.sns.domain.hashtag.entity.Hashtag;
+import com.car.sns.domain.hashtag.model.entity.Hashtag;
 
 /**
- * DTO for {@link com.car.sns.domain.hashtag.entity.Hashtag}
+ * DTO for {@link Hashtag}
  */
 public record HashtagDto(
         Long id,
@@ -25,4 +25,5 @@ public record HashtagDto(
     public Hashtag toEntity() {
         return Hashtag.of(hashtagName);
     }
+
 }

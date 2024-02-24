@@ -1,9 +1,9 @@
-package com.car.sns.domain.hashtag.service;
+package com.car.sns.domain.hashtag.service.read;
 
-import com.car.sns.application.usecase.HashtagUseCase;
+import com.car.sns.application.usecase.hashtag.HashtagUseCase;
 import com.car.sns.domain.board.model.ArticleDto;
-import com.car.sns.domain.hashtag.ArticleHashtagJpaRepository;
-import com.car.sns.infrastructure.repository.HashtagJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.ArticleHashtagJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.HashtagJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

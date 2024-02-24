@@ -1,8 +1,8 @@
 package com.car.sns.domain.comment.model;
 
-import com.car.sns.domain.board.entity.Article;
-import com.car.sns.domain.comment.entity.ArticleComment;
-import com.car.sns.domain.user.entity.UserAccount;
+import com.car.sns.domain.board.model.entity.Article;
+import com.car.sns.domain.comment.model.entity.ArticleComment;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * DTO for {@link ArticleComment}

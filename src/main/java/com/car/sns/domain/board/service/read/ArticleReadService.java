@@ -1,13 +1,11 @@
 package com.car.sns.domain.board.service.read;
 
-import com.car.sns.application.usecase.ArticleReaderUseCase;
-import com.car.sns.domain.board.model.type.SearchType;
+import com.car.sns.application.usecase.board.ArticleReaderUseCase;
 import com.car.sns.domain.board.model.ArticleDto;
-import com.car.sns.domain.hashtag.ArticleHashtagJpaRepository;
-import com.car.sns.domain.hashtag.service.HashtagReadService;
-import com.car.sns.infrastructure.repository.HashtagJpaRepository;
-import com.car.sns.presentation.model.ArticleWithCommentDto;
+import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.hashtag.service.read.HashtagReadService;
+import com.car.sns.presentation.model.response.ArticleDetailWithCommentResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,7 @@ public class ArticleReadService implements ArticleReaderUseCase {
             return articleRepository.findAll(pageable).map(ArticleDto::from);
         }
 
-        return switch (searchType) {
+        return switch (searchType) {//TODO: switch문과 쿼리성능 비교하여 쿼리 검색으로 변경 여부 확인할 것
             case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
             case HASHTAG -> hashtagReadService.searchContainHashtagName(searchKeyword, pageable);
@@ -41,14 +39,14 @@ public class ArticleReadService implements ArticleReaderUseCase {
     }
 
     @Override
-    public ArticleWithCommentDto getArticleDetailWithComments(Long articleId) {
+    public ArticleDetailWithCommentResponse getArticleDetailWithComments(Long articleId) {
         return articleRepository.findById(articleId)
-                .map(ArticleWithCommentDto::from)
+                .map(ArticleDetailWithCommentResponse::from)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: - articleId: " + articleId));
     }
 
-    @Override
     @Deprecated
+    @Override
     public ArticleDto getArticle(Long articleId) {
         return articleRepository.findById(articleId)
                 .map(ArticleDto::from)
