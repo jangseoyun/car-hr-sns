@@ -183,3 +183,6 @@ application-local.yml
 
 # JPA Buddy
 .jpb/
+
+#env
+/src/main/resources/env
