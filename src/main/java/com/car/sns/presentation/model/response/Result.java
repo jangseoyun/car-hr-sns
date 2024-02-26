@@ -1,4 +1,4 @@
-package com.car.sns.exception.model;
+package com.car.sns.presentation.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
