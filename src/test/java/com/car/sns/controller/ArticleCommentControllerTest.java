@@ -2,8 +2,8 @@ package com.car.sns.controller;
 
 import com.car.sns.config.SecurityConfigTest;
 import com.car.sns.domain.comment.model.ArticleCommentDto;
-import com.car.sns.presentation.controller.ArticleCommentController;
 import com.car.sns.domain.comment.service.ArticleCommentWriteService;
+import com.car.sns.presentation.controller.ArticleCommentController;
 import com.car.sns.presentation.model.request.ArticleCommentRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;

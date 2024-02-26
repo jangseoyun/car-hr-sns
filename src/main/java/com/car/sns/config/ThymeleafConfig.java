@@ -1,3 +1,4 @@
+/*
 package com.car.sns.config;
 
 import lombok.Getter;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 
+@Deprecated
 @Configuration
 public class ThymeleafConfig {
     @Bean
@@ -23,10 +25,13 @@ public class ThymeleafConfig {
     @Getter
     @ConfigurationProperties("spring.thymeleaf3")//thymeleaf3.decoupled-logic: true
     public static class Thymeleaf3Properties {
-        /**
+        */
+/**
          * Use Thymeleaf 3 Decoupled Logic
-         */
+         *//*
+
         private final boolean decoupledLogic;
     }
 
 }
+*/

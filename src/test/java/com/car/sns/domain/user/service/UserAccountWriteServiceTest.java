@@ -14,13 +14,22 @@ class UserAccountWriteServiceTest {
 
     @InjectMocks
     private UserAccountWriteService sut;
-
     @Mock
     private UserAccountJpaRepository userAccountJpaRepository;
 
     @DisplayName("given_when_then")
     @Test
     void givenKakaoOAuth2Response_whenSavingUserAccount_thenReturnUserAccountDto() {
+        //given
+
+        //when
+
+        //then
+    }
+
+    @DisplayName("given_when_then")
+    @Test
+    void given_when_then() {
         //given
 
         //when

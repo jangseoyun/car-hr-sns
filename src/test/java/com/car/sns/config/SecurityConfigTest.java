@@ -4,7 +4,6 @@ import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.util.Optional;
 
@@ -16,7 +15,7 @@ public class SecurityConfigTest {
     @MockBean
     private UserAccountJpaRepository userAccountRepository;
 
-    @BeforeTestMethod
+    //@BeforeTestMethod
     public void SecuritySetup() {
         given(userAccountRepository.findByUserId(anyString())).willReturn(Optional.of(UserAccount.of(
                 "seo",
