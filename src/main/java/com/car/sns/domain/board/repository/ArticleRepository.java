@@ -1,7 +1,7 @@
 package com.car.sns.domain.board.repository;
 
 import com.car.sns.domain.board.model.entity.Article;
-import com.car.sns.domain.board.entity.QArticle;
+import com.car.sns.domain.board.model.entity.QArticle;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import org.springframework.data.domain.Page;
