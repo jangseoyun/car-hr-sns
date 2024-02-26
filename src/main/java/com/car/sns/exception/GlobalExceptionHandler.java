@@ -1,7 +1,7 @@
 package com.car.sns.exception;
 
 import com.car.sns.exception.model.ErrorResult;
-import com.car.sns.exception.model.Result;
+import com.car.sns.presentation.model.response.Result;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                          HttpHeaders headers, HttpStatusCode status,
                                                                          final WebRequest request)
     {
-        logger.info("HttpRequestMethodNotSupported : ", ex);
+        logger.debug("HttpRequestMethodNotSupported : {} ", ex);
         ErrorResult errorResult = new ErrorResult(ex.getStatusCode(), ex.getMessage());
         return ResponseEntity
                 .status(status)
