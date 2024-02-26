@@ -1,6 +1,7 @@
 package com.car.sns.security;
 
 import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.exception.CarHrSnsAppException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.car.sns.exception.model.AppErrorCode.AUTHENTICATION_TOKEN_EXIST;
 
 public record CarAppPrincipal(
         //entity에서 사용하는 이름이 아닌 principal에서 사용하는 이름을 따라감
@@ -80,6 +83,9 @@ public record CarAppPrincipal(
 
     @Override
     public String getUsername() {
+        if (username == null) {
+            throw new CarHrSnsAppException(AUTHENTICATION_TOKEN_EXIST, AUTHENTICATION_TOKEN_EXIST.getMessage());
+        }
         return username;
     }
 

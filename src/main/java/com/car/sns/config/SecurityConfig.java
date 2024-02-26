@@ -1,8 +1,10 @@
 package com.car.sns.config;
 
+import com.car.sns.application.usecase.user.UserReadUseCase;
 import com.car.sns.domain.user.service.UserAccountReadService;
 import com.car.sns.domain.user.service.UserAccountWriteService;
 import com.car.sns.security.CarAppPrincipal;
+import com.car.sns.security.JwtTokenFilter;
 import com.car.sns.security.KakaoOAuth2Response;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class SecurityConfig {
     @Value("${jwt.token.secret}")
     private String secretKey;
     private final PasswordEncoder passwordEncoder;
+    private final UserReadUseCase userReadUseCase;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
@@ -72,7 +76,7 @@ public class SecurityConfig {
                         // 로그아웃 시 쿠키 삭제 설정 (예: "remember-me" 쿠키 삭제)
                         .deleteCookies("remember-me")
                 )
-                //.addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class) //UserNamePasswordAuthenticationFilter적용하기 전에 JWTTokenFilter를 적용 하라는 뜻 입니다.
+                .addFilterBefore(new JwtTokenFilter(secretKey, userReadUseCase), UsernamePasswordAuthenticationFilter.class) //UserNamePasswordAuthenticationFilter적용하기 전에 JWTTokenFilter를 적용.
                 .oauth2Login(oAuth -> oAuth
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService)

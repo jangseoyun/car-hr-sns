@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Result<T> {
     private String status;
-    private T data;
+    private T result;
 
-    public static <T> Result<T> error(T data) {
-        return new Result("ERROR", data);
+    public static <T> Result<T> error(T result) {
+        return new Result("ERROR", result);
     }
 
-    public static <T> Result<T> success(T data) {
-        return new Result("SUCCESS", data);
+    public static <T> Result<T> success(T result) {
+        return new Result("SUCCESS", result);
     }
 }

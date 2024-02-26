@@ -11,20 +11,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public record ArticleWithCommentsResponse(
-        Set<ArticleCommentDto> articleCommentDtos,
+        //Set<ArticleCommentDto> articleCommentDtos,
         String title,
         String content,
         LocalDateTime createdAt,
         String email,
         String nickname
 ) {
-    public static ArticleWithCommentsResponse of(Set<ArticleCommentDto> articleCommentDtos, String title, String content, LocalDateTime createdAt, String email, String nickname) {
-        return new ArticleWithCommentsResponse(articleCommentDtos, title, content, createdAt, email, nickname);
+    public static ArticleWithCommentsResponse of(String title, String content, LocalDateTime createdAt, String email, String nickname) {
+        return new ArticleWithCommentsResponse(title, content, createdAt, email, nickname);
     }
 
     public static ArticleWithCommentsResponse from(ArticleDetailWithCommentResponse dto) {
         return new ArticleWithCommentsResponse(
-                dto.articleCommentDtos(),
                 dto.title(),
                 dto.content(),
                 dto.createdAt(),

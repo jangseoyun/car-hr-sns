@@ -18,8 +18,7 @@ import java.time.LocalDateTime;
 @ToString
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class AuditingFields {
-
+public abstract class AuditingFields{
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
     @Column(name = "created_at",
@@ -41,6 +40,5 @@ public abstract class AuditingFields {
     @Column(name = "modified_by",
             length = 100)
     private String modifiedBy;
-
 }
 
