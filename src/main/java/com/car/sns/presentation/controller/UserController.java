@@ -6,6 +6,7 @@ import com.car.sns.domain.user.model.LoginDto;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.model.request.RegisterAccountRequest;
 import com.car.sns.presentation.model.request.UserLoginRequest;
+import com.car.sns.presentation.model.response.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +22,18 @@ public class UserController {
     private final UserReadUseCase userReadUseCase;
 
     @PostMapping("/register")
-    public ResponseEntity<UserAccountDto> userRegister(@RequestBody RegisterAccountRequest registerAccountRequest) {
+    public ResponseEntity<Result> userRegister(@RequestBody RegisterAccountRequest registerAccountRequest) {
         UserAccountDto userAccountDto = userManagementUseCase.userRegisterAccount(registerAccountRequest);
-        log.info("userAccountDto: {}", userAccountDto);
         return ResponseEntity
                 .ok()
-                .body(userAccountDto);
+                .body(Result.success(userAccountDto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserLoginRequest userLoginRequest) {
+    public ResponseEntity<Result> login(@RequestBody UserLoginRequest userLoginRequest) {
         log.info("userLoginRequest: {}", userLoginRequest);
         return ResponseEntity
                 .ok()
-                .body(userReadUseCase.login(LoginDto.from(userLoginRequest)));
+                .body(Result.success(userReadUseCase.login(LoginDto.from(userLoginRequest))));
     }
 }

@@ -11,6 +11,7 @@ import com.car.sns.presentation.model.request.ArticleRequest;
 import com.car.sns.presentation.model.response.ArticleDetailWithCommentResponse;
 import com.car.sns.presentation.model.response.ArticlePageResponse;
 import com.car.sns.presentation.model.response.ArticleWithCommentsResponse;
+import com.car.sns.presentation.model.response.Result;
 import com.car.sns.security.CarAppPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,14 +103,12 @@ public class ArticleController {
      * TODO: 게시글 생성 후 생성된 게시글 Response 보내주도록 리팩토링
      */
     @PostMapping("/create")
-    public ModelAndView createArticlePost(@RequestBody ArticleRequest articleRequest,
-                                          @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
+    public ResponseEntity<Result> createArticlePost(@RequestBody ArticleRequest articleRequest,
+                                                    @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
     {
-        Long savedArticleId = articleManagementUseCase
+        Result<ArticleDto> savedArticle = articleManagementUseCase
                 .createArticle(CreateArticleInfoDto.of(articleRequest, carAppPrincipal.getUsername()));
 
-        ModelAndView redirect = new ModelAndView("redirect:/articles/detail/");
-        redirect.addObject("articleId", savedArticleId);
-        return redirect;
+        return ResponseEntity.ok().body(savedArticle);
     }
 }

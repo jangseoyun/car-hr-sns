@@ -28,11 +28,13 @@ public class HashtagWriteService {
         Set<String> existingHashtagNames = hashtagReadService.findHashtagByNames(hashtagNamesInContent)
                 .stream().collect(Collectors.toUnmodifiableSet());
 
-        hashtagNamesInContent.forEach(newHashtagName -> {
-            if (!existingHashtagNames.contains(newHashtagName)) {
-                hashtagJpaRepository.save(Hashtag.of(newHashtagName));
-            }
-        });
+        if (!hashtagNamesInContent.isEmpty()) {
+            hashtagNamesInContent.forEach(newHashtagName -> {
+                if (!existingHashtagNames.contains(newHashtagName)) {
+                    hashtagJpaRepository.save(Hashtag.of(newHashtagName));
+                }
+            });
+        }
     }
 
 }

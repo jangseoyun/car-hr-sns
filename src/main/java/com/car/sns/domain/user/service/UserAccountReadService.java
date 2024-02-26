@@ -3,8 +3,10 @@ package com.car.sns.domain.user.service;
 import com.car.sns.application.usecase.user.UserReadUseCase;
 import com.car.sns.domain.user.model.LoginDto;
 import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.exception.CarHrSnsAppException;
 import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
+import com.car.sns.presentation.model.response.UserLoginResponse;
 import com.car.sns.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.car.sns.exception.model.AppErrorCode.INVALID_USER_ID_PASSWORD;
+import static com.car.sns.exception.model.AppErrorCode.USER_NOTFOUND_ACCOUNT;
 
 @Slf4j
 @Service
@@ -39,17 +42,22 @@ public class UserAccountReadService implements UserReadUseCase {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public UserLoginResponse login(LoginDto loginDto) {
         UserAccountDto userAccountDto = userAccountJpaRepository.findByUserId(loginDto.userId())
                 .filter(user -> passwordEncoder.matches(loginDto.password(), user.getUserPassword()))
                 .map(UserAccountDto::from)
                 .orElseThrow(() -> {
                     throw new CarHrSnsAppException(INVALID_USER_ID_PASSWORD, INVALID_USER_ID_PASSWORD.getMessage());
                 });
-        log.info("login userAccountDto: {}", userAccountDto);
 
-        String token = JwtUtil.createToken(userAccountDto.userId(), secretKey, expireTimeMs);
-        log.info("token: {}", token);
-        return token;
+        log.info("login userAccountDto: {}", userAccountDto);
+        return  UserLoginResponse.of(JwtUtil.createToken(userAccountDto.userId(), secretKey, expireTimeMs));
+    }
+
+    public UserAccount loadUserByUserName(String userId) {
+        return userAccountJpaRepository.findByUserId(userId)
+                .orElseThrow(
+                        () -> new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage() + ":" + userId)
+                );
     }
 }

@@ -1,14 +1,11 @@
 package com.car.sns.domain.board.model.entity;
 
-import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.common.AuditingFields;
 import com.car.sns.domain.user.model.entity.UserAccount;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,12 +34,12 @@ public class Article extends AuditingFields {
             length = 10000)
     private String content;
 
-    @ToString.Exclude
+    /*@ToString.Exclude
     @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    private Set<ArticleComment> articleComment = new HashSet<>();
+    private Set<ArticleComment> articleComment = new HashSet<>();*/
 
     @ManyToOne(optional = false,
             cascade = CascadeType.ALL)
