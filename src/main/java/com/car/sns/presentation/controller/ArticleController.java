@@ -40,7 +40,7 @@ public class ArticleController {
      * searchType, searchKeyword 존재 X : 게시글 전체 조회
      * searchType, searchKeyword 존재 O : 타입/키워드를 필터링으로 해당 게시글 조회
      */
-    @GetMapping("")
+    @GetMapping("/index")
     public ResponseEntity<ArticlePageResponse> getAllOrSearchArticles(
             @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchKeyword,
