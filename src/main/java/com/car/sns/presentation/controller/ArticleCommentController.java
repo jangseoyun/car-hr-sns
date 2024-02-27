@@ -2,13 +2,14 @@ package com.car.sns.presentation.controller;
 
 import com.car.sns.application.usecase.comment.ArticleCommentManagementUseCase;
 import com.car.sns.presentation.model.request.ArticleCommentRequest;
+import com.car.sns.presentation.model.response.Result;
 import com.car.sns.security.CarAppPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
@@ -19,15 +20,13 @@ public class ArticleCommentController {
     private final ArticleCommentManagementUseCase articleCommentManagementUseCase;
 
     @PostMapping("/create")
-    public ModelAndView postNewArticleComment(@RequestBody ArticleCommentRequest articleCommentRequest,
-                                              @AuthenticationPrincipal CarAppPrincipal carAppPrincipal
+    public ResponseEntity<Result> postNewArticleComment(@RequestBody ArticleCommentRequest articleCommentRequest,
+                                                        @AuthenticationPrincipal CarAppPrincipal carAppPrincipal
     ) {
         log.info("request: {}", articleCommentRequest.toString());
-        Long savedCommentId = articleCommentManagementUseCase.saveArticleComment(articleCommentRequest.toDto(carAppPrincipal));
+        articleCommentManagementUseCase.saveArticleComment(articleCommentRequest.toDto(carAppPrincipal));
 
-        ModelAndView redirect = new ModelAndView("redirect:/articles/detail/");
-        redirect.addObject("articleId", articleCommentRequest.articleId());
-        return redirect;
+        return ResponseEntity.ok().body(Result.success(null));
     }
 
     //soft delete
