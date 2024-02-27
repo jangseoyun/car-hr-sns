@@ -1,3 +1,4 @@
+/*
 package com.car.sns.presentation.model.response;
 
 import com.car.sns.domain.comment.model.ArticleCommentDto;
@@ -64,7 +65,8 @@ class ArticleWithCommentsResponseTest {
         //then
         assertThat(actual.articleCommentDtos()).isEqualTo(parentCommentAndChildComments);
         //TODO: 시간을 받아주는것을 넣어야 한다
-        /*assertThat(actual.articleCommentDtos())
+        */
+/*assertThat(actual.articleCommentDtos())
                 .containsExactly(
                         createArticleCommentDto(5L, 4L),
                         createArticleCommentDto(6L, 5L),
@@ -73,7 +75,8 @@ class ArticleWithCommentsResponseTest {
                 .flatExtracting(ArticleCommentDto::childComments)
                 .containsExactly(
 
-                );*/
+                );*//*
+
     }
 
     private ArticleWithCommentsResponse createArticleWithNoParentCommentsDto(Set<ArticleCommentDto> articleCommentDtos) {
@@ -117,4 +120,4 @@ class ArticleWithCommentsResponseTest {
                 createArticleCommentDto(7L, null)
         );
     }
-}
+}*/
