@@ -63,7 +63,7 @@ ARTICLE_COMMENT ||--o{ LIKE : allows
     LIKE {
         bigint like_id PK "좋아요 PK"
         bigint user_account_id FK "좋아요를 발생시긴 사용자 PK"
-        bigint article_comment_id FK "좋아요가 발생한 댓글 주체 PK"
+        bigint article_id FK "좋아요가 발생한 게시글 주체 PK"
         atetime created_at "작성일"
         varchar(100) created_by "작성자"
         datetime modified_at "수정일"
