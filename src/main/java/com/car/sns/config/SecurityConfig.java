@@ -43,6 +43,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf((csrf) -> csrf.disable())
                 .httpBasic(basic -> basic.disable())
+                .anonymous(anonymous -> anonymous.disable())
                 .authorizeHttpRequests(auth -> auth
                         //.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(
