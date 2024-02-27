@@ -25,16 +25,19 @@ public class HashtagWriteService {
     public void renewHashtagsFromContent(String content) {
         //게시글 작성시 별도 입력을 하지 않고 본문에서 해시태그 파싱
         Set<String> hashtagNamesInContent = hashtagReadService.parseHashtagNames(content);
+
+        if (hashtagNamesInContent.isEmpty()) {
+            return;
+        }
+
         Set<String> existingHashtagNames = hashtagReadService.findHashtagByNames(hashtagNamesInContent)
                 .stream().collect(Collectors.toUnmodifiableSet());
 
-        if (!hashtagNamesInContent.isEmpty()) {
-            hashtagNamesInContent.forEach(newHashtagName -> {
-                if (!existingHashtagNames.contains(newHashtagName)) {
-                    hashtagJpaRepository.save(Hashtag.of(newHashtagName));
-                }
-            });
-        }
+        hashtagNamesInContent.forEach(newHashtagName -> {
+            if (!existingHashtagNames.contains(newHashtagName)) {
+                hashtagJpaRepository.save(Hashtag.of(newHashtagName));
+            }
+        });
     }
 
 }

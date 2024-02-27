@@ -12,5 +12,6 @@ public interface HashtagJpaRepository extends JpaRepository<Hashtag, Long> , Has
     @Query("select a.id from Hashtag a where a.hashtagName LIKE CONCAT('%',:hashtag,'%')")
     Set<Long> findByHashtag(@Param("hashtag") String hashtag);
 
-    Set<String> findByHashtagNameIn(Set<String> hashtagNames);
+    @Query("SELECT h FROM Hashtag h WHERE h.hashtagName IN :hashtagName")
+    Set<String> findByHashtagNameIn(@Param("hashtagName") Set<String> hashtagName);
 }
