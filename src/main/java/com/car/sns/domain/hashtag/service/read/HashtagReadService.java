@@ -68,6 +68,8 @@ public class HashtagReadService implements HashtagUseCase {
             result.add(matcher.group().replace("#", ""));
         }
 
+        log.info("parse content: {}", result.stream().toList());
+
         return Set.copyOf(result);
     }
 

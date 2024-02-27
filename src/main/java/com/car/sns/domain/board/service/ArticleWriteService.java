@@ -58,7 +58,8 @@ public class ArticleWriteService implements ArticleManagementUseCase {
         Article article = Article.of(accessUser, createArticleInfoDto.title(), createArticleInfoDto.content());
         Article response = articleRepository.save(article);
 
-        //hashtagWriteService.renewHashtagsFromContent(article.getContent());
-        return Result.success(ArticleDto.from(article));
+        //TODO: 게시글 생성시 해시태그를 생성하여 저장하는 방식인데 사용자가 모를 경우 null 입력 받음
+        hashtagWriteService.renewHashtagsFromContent(article.getContent());
+        return Result.success(ArticleDto.from(response));
     }
 }
