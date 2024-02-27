@@ -7,7 +7,7 @@ import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.board.model.type.SearchType;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
-import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -33,7 +33,7 @@ class ArticleServiceTest {
     @Mock
     private ArticleManagementUseCase articleManagementUseCase;
     @Mock
-    private ArticleRepository articleRepository;
+    private ArticleJpaRepository articleRepository;
 
     @BeforeEach
     void setUp() {

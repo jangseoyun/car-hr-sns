@@ -16,7 +16,11 @@ public enum AppErrorCode {
 
     //토큰 만료
     AUTHENTICATION_TOKEN_EXIST          ("A0001", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다"),
-    INVALID_TOKEN                       ("A0002", HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다");
+    INVALID_TOKEN                       ("A0002", HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다"),
+
+    //서비스
+    USER_NOT_MATCH                      ("SV0001", HttpStatus.FORBIDDEN, "작성자와 요청자가 일치하지 않습니다"),
+    ENTITY_NOT_FOUND                    ("SV1001", HttpStatus.NOT_FOUND, "존재하지 않는 게시글 입니다");
 
     private String errorCode;
     private HttpStatus status;

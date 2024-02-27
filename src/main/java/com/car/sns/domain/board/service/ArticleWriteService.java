@@ -4,9 +4,10 @@ import com.car.sns.application.usecase.board.ArticleManagementUseCase;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.model.CreateArticleInfoDto;
 import com.car.sns.domain.board.model.entity.Article;
-import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import com.car.sns.domain.hashtag.service.HashtagWriteService;
 import com.car.sns.domain.user.model.entity.UserAccount;
+import com.car.sns.exception.CarHrSnsAppException;
 import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import com.car.sns.presentation.model.request.ArticleModifyRequest;
 import com.car.sns.presentation.model.response.Result;
@@ -16,13 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.car.sns.exception.model.AppErrorCode.ENTITY_NOT_FOUND;
+import static com.car.sns.exception.model.AppErrorCode.USER_NOT_MATCH;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ArticleWriteService implements ArticleManagementUseCase {
 
-    private final ArticleRepository articleRepository;
+    private final ArticleJpaRepository articleRepository;
     private final UserAccountJpaRepository userAccountJpaRepository;
     private final HashtagWriteService hashtagWriteService;
 
@@ -36,17 +40,17 @@ public class ArticleWriteService implements ArticleManagementUseCase {
     }
 
     @Override
-    public void updateArticle(ArticleModifyRequest articleModifyDto, String authUsername) {
-        try {
-            Article article = articleRepository.getReferenceById(articleModifyDto.articleId());
+    public void updateArticle(ArticleModifyRequest articleModifyRequest, String authUsername) {
+            Article article = articleRepository.findById(articleModifyRequest.articleId()).orElseThrow(() -> {
+                throw new CarHrSnsAppException(ENTITY_NOT_FOUND, ENTITY_NOT_FOUND.getMessage());
+            });
 
-            if (articleModifyDto.createdBy() == authUsername) {
-                if (articleModifyDto.title() != null) {article.setTitle(articleModifyDto.title());}
-                if (articleModifyDto.content() != null) {article.setContent(articleModifyDto.content());}
+            if (!article.getCreatedBy().equals(authUsername)) {
+                throw new CarHrSnsAppException(USER_NOT_MATCH, USER_NOT_MATCH.getMessage());
             }
-        } catch (EntityNotFoundException e) {
-            log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", articleModifyDto);
-        }
+
+            if (articleModifyRequest.title() != null) {article.setTitle(articleModifyRequest.title());}
+            if (articleModifyRequest.content() != null) {article.setContent(articleModifyRequest.content());}
     }
 
     @Override

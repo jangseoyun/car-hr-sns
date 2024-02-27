@@ -3,7 +3,7 @@ package com.car.sns.repository;
 import com.car.sns.domain.board.model.entity.Article;
 import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.infrastructure.jpaRepository.ArticleCommentJpaRepository;
-import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("JPA 연결 테스트.")
 class JpaRepositoryTest {
 
-    private final ArticleRepository articleRepository;
+    private final ArticleJpaRepository articleRepository;
     private final ArticleCommentJpaRepository articleCommentRepository;
 
     public JpaRepositoryTest(
-            @Autowired  ArticleRepository articleRepository,
+            @Autowired ArticleJpaRepository articleRepository,
             @Autowired ArticleCommentJpaRepository articleCommentRepository)
     {
         this.articleRepository = articleRepository;
