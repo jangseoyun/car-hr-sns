@@ -15,7 +15,8 @@ public enum AppErrorCode {
     INVALID_USER_ID_PASSWORD            ("UA0003", HttpStatus.FORBIDDEN, "아이디 또는 비밀번호가 일치하지 않습니다. 회원정보를 확인해주세요"),
 
     //토큰 만료
-    AUTHENTICATION_TOKEN_EXIST          ("A0001", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다.");
+    AUTHENTICATION_TOKEN_EXIST          ("A0001", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다"),
+    INVALID_TOKEN                       ("A0002", HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다");
 
     private String errorCode;
     private HttpStatus status;

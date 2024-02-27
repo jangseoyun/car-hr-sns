@@ -81,6 +81,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService)
                         )
+                ).exceptionHandling( ex ->
+                    ex.authenticationEntryPoint(new AuthenticationEntryPointImpl())
                 ).build();
     }
 
