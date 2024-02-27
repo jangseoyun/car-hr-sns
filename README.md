@@ -69,6 +69,17 @@ ARTICLE_COMMENT ||--o{ LIKE : allows
         datetime modified_at "수정일"
         varchar(100) modified_by "수정자"
     }
+USER_ACCOUNT ||--o{ ALARM : allows   
+    ALARM {
+        bigint alarm_id PK "알람 PK"
+        bigint user_account_id FK "알람을 받을 사용자 PK"
+        varchar(50) alarm_type "알람 타입 (enum)"
+        json alarm_args "알람이 발생한 주체 object"
+        atetime created_at "작성일"
+        varchar(100) created_by "작성자"
+        datetime modified_at "수정일"
+        varchar(100) modified_by "수정자"
+    }
    
 ```
 
