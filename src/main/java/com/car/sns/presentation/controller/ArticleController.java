@@ -89,14 +89,11 @@ public class ArticleController {
     }
 
     @PutMapping("")
-    public ModelAndView modifyPostContent(@RequestBody ArticleModifyRequest articleModifyRequest,
-                                          @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
+    public ResponseEntity<Result> modifyPostContent(@RequestBody ArticleModifyRequest articleModifyRequest,
+                                                    @AuthenticationPrincipal CarAppPrincipal carAppPrincipal)
     {
         articleManagementUseCase.updateArticle(articleModifyRequest, carAppPrincipal.getUsername());
-
-        ModelAndView redirect = new ModelAndView("redirect:/articles/detail/");
-        redirect.addObject(articleModifyRequest.articleId());
-        return redirect;
+        return ResponseEntity.ok().body(Result.success(articleModifyRequest.articleId()));
     }
 
     /**

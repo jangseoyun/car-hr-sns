@@ -7,7 +7,7 @@ import com.car.sns.domain.comment.model.ArticleCommentDto;
 import com.car.sns.domain.comment.service.read.ArticleCommentReadService;
 import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.infrastructure.jpaRepository.ArticleCommentJpaRepository;
-import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class ArticleCommentServiceTest {
     @InjectMocks
     private ArticleCommentWriteService writeSut;
     @Mock
-    private ArticleRepository articleRepository;
+    private ArticleJpaRepository articleRepository;
     @Mock
     private ArticleCommentJpaRepository articleCommentRepository;
 

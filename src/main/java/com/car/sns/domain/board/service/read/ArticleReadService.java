@@ -3,7 +3,7 @@ package com.car.sns.domain.board.service.read;
 import com.car.sns.application.usecase.board.ArticleReaderUseCase;
 import com.car.sns.domain.board.model.ArticleDto;
 import com.car.sns.domain.board.model.type.SearchType;
-import com.car.sns.domain.board.repository.ArticleRepository;
+import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import com.car.sns.domain.hashtag.service.read.HashtagReadService;
 import com.car.sns.presentation.model.response.ArticleDetailWithCommentResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ArticleReadService implements ArticleReaderUseCase {
 
-    private final ArticleRepository articleRepository;
+    private final ArticleJpaRepository articleRepository;
     private final HashtagReadService hashtagReadService;
 
     @Override
