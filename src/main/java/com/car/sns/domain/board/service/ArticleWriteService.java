@@ -55,7 +55,6 @@ public class ArticleWriteService implements ArticleManagementUseCase {
 
     @Override
     public Result<ArticleDto> createArticle(CreateArticleInfoDto createArticleInfoDto) {
-        //article에 있는 해시태그 분리해서 저장
         UserAccount accessUser = userAccountJpaRepository.findByUserId(createArticleInfoDto.username())
                 .orElseThrow( () -> new EntityNotFoundException("잘못된 사용자 접속입니다."));
 

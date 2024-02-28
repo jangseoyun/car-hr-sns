@@ -26,7 +26,7 @@ public class LikeController {
     @GetMapping("/{articleId}")
     public ResponseEntity<Result> saveLikeToArticle(@PathVariable("articleId") Long articleId,
                                                     @AuthenticationPrincipal CarAppPrincipal carAppPrincipal) {
-        likeManagementUseCase.saveLikeTarget(articleId, carAppPrincipal.getName());
+        likeManagementUseCase.saveLikeTarget(articleId, carAppPrincipal.userAccountDto());
         return ResponseEntity.ok().body(Result.success(null));
     }
 

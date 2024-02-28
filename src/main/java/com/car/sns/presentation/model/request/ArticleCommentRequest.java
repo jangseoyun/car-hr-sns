@@ -31,13 +31,7 @@ public record ArticleCommentRequest(
         return ArticleCommentDto.of(
                 articleId,
                 parentCommentId,
-                UserAccountDto.of(
-                    carAppPrincipal.getUsername(),
-                    carAppPrincipal.getPassword(),
-                    carAppPrincipal.email(),
-                    carAppPrincipal.nickname(),
-                    carAppPrincipal.memo()
-                ),
+                carAppPrincipal.userAccountDto(),
                 content);
     }
 }

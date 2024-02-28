@@ -3,6 +3,7 @@ package com.car.sns.config;
 import com.car.sns.application.usecase.user.UserReadUseCase;
 import com.car.sns.domain.user.service.UserAccountReadService;
 import com.car.sns.domain.user.service.UserAccountWriteService;
+import com.car.sns.exception.CarHrSnsAppException;
 import com.car.sns.security.CarAppPrincipal;
 import com.car.sns.security.JwtTokenFilter;
 import com.car.sns.security.KakaoOAuth2Response;
@@ -17,7 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -25,6 +25,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.car.sns.exception.model.AppErrorCode.USER_NOTFOUND_ACCOUNT;
 
 @Configuration
 @RequiredArgsConstructor
@@ -38,8 +40,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
                                                    OAuth2UserService<OAuth2UserRequest,
-                                                   OAuth2User> oAuth2UserService) throws Exception
-    {
+                                                           OAuth2User> oAuth2UserService) throws Exception {
         return httpSecurity
                 .csrf((csrf) -> csrf.disable())
                 .httpBasic(basic -> basic.disable())
@@ -82,8 +83,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService)
                         )
-                ).exceptionHandling( ex ->
-                    ex.authenticationEntryPoint(new AuthenticationEntryPointImpl())
+                ).exceptionHandling(ex ->
+                        ex.authenticationEntryPoint(new AuthenticationEntryPointImpl())
                 ).build();
     }
 
@@ -97,7 +98,9 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(UserAccountReadService userAccountReadService) {
         return username -> userAccountReadService.searchUser(username)
                 .map(CarAppPrincipal::from)
-                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자 입니다."));
+                .orElseThrow(() -> {
+                    throw new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage());
+                });
     }
 
     @Bean

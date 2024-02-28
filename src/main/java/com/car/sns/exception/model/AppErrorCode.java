@@ -23,7 +23,10 @@ public enum AppErrorCode {
     ENTITY_NOT_FOUND                ("SV1001", HttpStatus.NOT_FOUND, "존재하지 않는 게시글 입니다"),
 
     //DB
-    DATABASE_INSERT_FAIL            ("DB0001", HttpStatus.EXPECTATION_FAILED, "데이터베이스 등록 실패");
+    DATABASE_INSERT_FAIL            ("DB0001", HttpStatus.EXPECTATION_FAILED, "데이터베이스 등록 실패"),
+
+    //서버
+    INTERNAL_SERVER_ERROR           ("SER001", HttpStatus.INTERNAL_SERVER_ERROR, "internal server error");
 
     private String errorCode;
     private HttpStatus status;
