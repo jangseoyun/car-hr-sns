@@ -2,8 +2,8 @@ package com.car.sns.domain.comment.model;
 
 import com.car.sns.domain.board.model.entity.Article;
 import com.car.sns.domain.comment.model.entity.ArticleComment;
-import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.domain.user.model.entity.UserAccount;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

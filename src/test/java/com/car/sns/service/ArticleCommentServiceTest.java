@@ -5,7 +5,7 @@ import com.car.sns.domain.board.model.entity.Article;
 import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.domain.comment.model.ArticleCommentDto;
 import com.car.sns.domain.comment.service.read.ArticleCommentReadService;
-import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.domain.user.model.CarAppPrincipal;
 import com.car.sns.infrastructure.jpaRepository.ArticleCommentJpaRepository;
 import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import org.junit.jupiter.api.Disabled;
@@ -70,12 +70,12 @@ class ArticleCommentServiceTest {
     }
 
     private ArticleCommentDto createdArticleCommentDto(String content) {
-        UserAccountDto userAccountDto = UserAccountDto.of(null, "uno", "uno", "pw", "email@email.com", "nickname", null);
+        CarAppPrincipal userAccountDto = CarAppPrincipal.of(null, "uno", "uno", "pw", "email@email.com", "nickname", null);
         return ArticleCommentDto.of(1L, userAccountDto, content);
     }
 
     private Article createArticle() {
-        UserAccountDto userAccountDto = UserAccountDto.of(null, null, "uno", "pw", "email@email.com", "nickname", null);
+        CarAppPrincipal userAccountDto = CarAppPrincipal.of(null, null, "uno", "pw", "email@email.com", "nickname", null);
         return Article.of(userAccountDto.toEntity(), "title", "content");
     }
 }

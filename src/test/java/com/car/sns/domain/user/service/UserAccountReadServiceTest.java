@@ -1,8 +1,8 @@
 package com.car.sns.domain.user.service;
 
 import com.car.sns.domain.user.model.entity.UserAccount;
-import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
+import com.car.sns.security.CarAppPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +35,7 @@ class UserAccountReadServiceTest {
                 .willReturn(Optional.of(createUserAccount(username)));
 
         //when
-        Optional<UserAccountDto> result = sut.searchUser(username);
+        Optional<CarAppPrincipal> result = sut.searchUser(username);
 
         //then
         assertThat(result).isPresent();

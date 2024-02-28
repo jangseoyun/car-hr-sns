@@ -1,7 +1,7 @@
 package com.car.sns.security;
 
 import com.car.sns.application.usecase.user.UserReadUseCase;
-import com.car.sns.domain.user.model.UserAccountDto;
+import com.car.sns.exception.CarHrSnsAppException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
+import static com.car.sns.exception.model.AppErrorCode.USER_NOTFOUND_ACCOUNT;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -53,10 +55,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
 
             String userId = JwtUtil.getUserName(token, secretKey);
-            UserAccountDto userAccountDto = userReadUseCase.searchUser(userId).orElseThrow();
+            CarAppPrincipal carAppPrincipal = userReadUseCase.searchUser(userId).orElseThrow(() -> {
+                throw new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage());
+            });
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    CarAppPrincipal.from(userAccountDto), null, null
+                    carAppPrincipal, null, null
             );
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

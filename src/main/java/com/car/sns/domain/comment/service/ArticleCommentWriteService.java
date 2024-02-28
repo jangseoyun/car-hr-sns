@@ -8,7 +8,6 @@ import com.car.sns.domain.board.repository.ArticleJpaRepository;
 import com.car.sns.domain.comment.model.ArticleCommentDto;
 import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.infrastructure.jpaRepository.ArticleCommentJpaRepository;
-import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,6 @@ public class ArticleCommentWriteService implements ArticleCommentManagementUseCa
 
     private final ArticleJpaRepository articleRepository;
     private final ArticleCommentJpaRepository articleCommentRepository;
-    private final UserAccountJpaRepository userAccountRepository;
     private final AlarmManagementUseCase alarmManagementUseCase;
 
     @Override
