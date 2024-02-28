@@ -1,9 +1,8 @@
 package com.car.sns.presentation.model.request;
 
-import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.domain.comment.model.ArticleCommentDto;
+import com.car.sns.domain.comment.model.entity.ArticleComment;
 import com.car.sns.domain.user.model.UserAccountDto;
-import com.car.sns.security.CarAppPrincipal;
 
 /**
  * DTO for {@link ArticleComment}
@@ -27,7 +26,7 @@ public record ArticleCommentRequest(
         return ArticleCommentDto.of(articleId, parentCommentId, userAccountDto, content);
     }
 
-    public ArticleCommentDto toDto(CarAppPrincipal carAppPrincipal) {
+    public ArticleCommentDto toDto(com.car.sns.security.CarAppPrincipal carAppPrincipal) {
         return ArticleCommentDto.of(
                 articleId,
                 parentCommentId,

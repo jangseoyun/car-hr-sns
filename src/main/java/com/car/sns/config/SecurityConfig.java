@@ -40,19 +40,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
                                                    OAuth2UserService<OAuth2UserRequest,
-                                                           OAuth2User> oAuth2UserService) throws Exception {
+                                                   OAuth2User> oAuth2UserService) throws Exception {
         return httpSecurity
                 .csrf((csrf) -> csrf.disable())
                 .httpBasic(basic -> basic.disable())
                 .anonymous(anonymous -> anonymous.disable())
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/",
                                 "/articles/index"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user/register", "/user/login").permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(
@@ -91,16 +90,16 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {//spring security에서 제외하겠다는 것
         //static resource 제외 (css, js ...)
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .requestMatchers(HttpMethod.POST, "/user/register", "/user/login");
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserAccountReadService userAccountReadService) {
-        return username -> userAccountReadService.searchUser(username)
-                .map(CarAppPrincipal::from)
-                .orElseThrow(() -> {
-                    throw new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage());
-                });
+    public UserDetailsService userDetailsService(UserAccountReadService userReadUseCase) {
+        return username -> userReadUseCase.searchUser(username)
+                .orElseThrow(() -> {throw new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage());
+        });
     }
 
     @Bean
@@ -122,7 +121,6 @@ public class SecurityConfig {
 
             //DB에 user가 있으면 반환, 없으면 저장
             return userAccountReadService.searchUser(username)
-                    .map(CarAppPrincipal::from)
                     .orElseGet(() -> CarAppPrincipal.from(
                             userAccountWriteService.saveKakaoUserAccount(kakaoOAuth2Response, dummyPassword))
                     );
