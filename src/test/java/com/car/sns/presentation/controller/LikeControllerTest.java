@@ -1,6 +1,7 @@
 package com.car.sns.presentation.controller;
 
 import com.car.sns.application.usecase.like.LikeManagementUseCase;
+import com.car.sns.domain.user.model.UserAccountDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -52,7 +54,7 @@ class LikeControllerTest {
         //given
         Long articleId = 1L;
         String userId = "seoyun33";
-        willDoNothing().given(likeManagementUseCase).saveLikeTarget(eq(articleId), eq(userId));
+        willDoNothing().given(likeManagementUseCase).saveLikeTarget(eq(articleId), any(UserAccountDto.class));
 
         //when
         mockMvc.perform(get("/like/" + articleId)
@@ -60,6 +62,6 @@ class LikeControllerTest {
                 .andExpect(status().isOk());
 
         //then
-        then(likeManagementUseCase).should().saveLikeTarget(eq(articleId), eq(userId));
+        then(likeManagementUseCase).should().saveLikeTarget(eq(articleId), any(UserAccountDto.class));
     }
 }

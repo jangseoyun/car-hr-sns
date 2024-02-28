@@ -22,11 +22,18 @@ public record CarAppPrincipal(
         String email,
         String nickname,
         String memo,
+        UserAccountDto userAccountDto,
         Map<String, Object> oAuth2Attribute
 
 ) implements UserDetails, OAuth2User {
 
-    public static CarAppPrincipal of(String username, String password, String email, String nickname, String memo, Map<String, Object> oAuth2Attribute) {
+    public static CarAppPrincipal of(String username,
+                                     String password,
+                                     String email,
+                                     String nickname,
+                                     String memo,
+                                     UserAccountDto userAccountDto,
+                                     Map<String, Object> oAuth2Attribute) {
         Set<RoleType> roleTypes = Set.of(RoleType.USER);
 
         return new CarAppPrincipal(
@@ -39,11 +46,17 @@ public record CarAppPrincipal(
                 email,
                 nickname,
                 memo,
+                userAccountDto,
                 oAuth2Attribute);
     }
 
-    public static CarAppPrincipal of(String username, String password, String email, String nickname, String memo) {
-        return CarAppPrincipal.of(username, password, email, nickname, memo, Map.of());
+    public static CarAppPrincipal of(String username,
+                                     String password,
+                                     String email,
+                                     String nickname,
+                                     String memo,
+                                     UserAccountDto userAccountDto) {
+        return CarAppPrincipal.of(username, password, email, nickname, memo, userAccountDto, Map.of());
     }
 
     public static CarAppPrincipal from(UserAccountDto userAccountDto) {
@@ -52,7 +65,8 @@ public record CarAppPrincipal(
                 userAccountDto.userPassword(),
                 userAccountDto.email(),
                 userAccountDto.nickname(),
-                userAccountDto.memo());
+                userAccountDto.memo(),
+                userAccountDto);
     }
 
     public UserAccountDto toDto() {

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
  */
 public record AlarmDto(
         LocalDateTime createdAt,
-        String toUserId,
         AlarmType alarmType,
         AlarmArgs alarmArgs,
         String alarmText
@@ -19,7 +18,6 @@ public record AlarmDto(
     public static AlarmDto from(Alarm alarm) {
         return new AlarmDto(
                 alarm.getCreatedAt(),
-                alarm.getUserAccount().getUserId(),
                 alarm.getAlarmType(),
                 alarm.getAlarmArgs(),
                 alarm.getAlarmType().getAlarmText());
