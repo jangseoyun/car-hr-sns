@@ -1,8 +1,14 @@
 package com.car.sns.domain.alarm.service.sse;
 
 import com.car.sns.application.usecase.EmitterUseCase;
+import com.car.sns.domain.alarm.model.AlarmArgs;
+import com.car.sns.domain.alarm.model.AlarmType;
+import com.car.sns.domain.alarm.model.entity.Alarm;
+import com.car.sns.domain.user.model.entity.UserAccount;
 import com.car.sns.exception.CarHrSnsAppException;
 import com.car.sns.infrastructure.EmitterRepository;
+import com.car.sns.infrastructure.jpaRepository.AlarmJpaRepository;
+import com.car.sns.infrastructure.jpaRepository.UserAccountJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 
 import static com.car.sns.exception.model.AppErrorCode.NOTIFICATION_CONNECT_ERROR;
+import static com.car.sns.exception.model.AppErrorCode.USER_NOTFOUND_ACCOUNT;
 
 @Slf4j
 @Service
@@ -19,6 +26,9 @@ public class EmitterService implements EmitterUseCase {
     private final static Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
     private final static String ALARM_NAME = "alarm";
     private final EmitterRepository emitterRepository;
+    private final AlarmJpaRepository alarmJpaRepository;
+    private final UserAccountJpaRepository userAccountJpaRepository;
+
 
     @Override
     public SseEmitter connectAlarm(String userId) {
@@ -42,10 +52,15 @@ public class EmitterService implements EmitterUseCase {
 
     //sse 이벤트를 보낸다
     @Override
-    public void send(String userId, Long alarmId) {
-        emitterRepository.get(userId).ifPresentOrElse(sseEmitter -> {
+    public void send(AlarmType alarmType, AlarmArgs alarmArgs, String receiverUserId) {
+        UserAccount receiverUser = userAccountJpaRepository.findByUserId(receiverUserId).orElseThrow(() -> {
+            throw new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage());
+        });
+        //alarm save & sse emitter
+        Alarm alarm = alarmJpaRepository.save(Alarm.of(receiverUser, alarmType, alarmArgs));
+        emitterRepository.get(receiverUserId).ifPresentOrElse(sseEmitter -> {
                     try {
-                        sseEmitter.send(SseEmitter.event().id(alarmId.toString()).name(ALARM_NAME).data("new alarm!!"));
+                        sseEmitter.send(SseEmitter.event().id(alarm.getId().toString()).name(ALARM_NAME).data("new alarm!!"));
                     } catch (IOException e) {
                         throw new CarHrSnsAppException(NOTIFICATION_CONNECT_ERROR, NOTIFICATION_CONNECT_ERROR.getMessage());
                     }
