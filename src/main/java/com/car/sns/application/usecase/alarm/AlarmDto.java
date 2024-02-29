@@ -10,13 +10,16 @@ import java.time.LocalDateTime;
  * DTO for {@link com.car.sns.domain.alarm.model.entity.Alarm}
  */
 public record AlarmDto(
+        Long alarmId,
+        String toUserId,
         LocalDateTime createdAt,
         AlarmType alarmType,
         AlarmArgs alarmArgs,
-        String alarmText
-) {
+        String alarmText) {
     public static AlarmDto from(Alarm alarm) {
         return new AlarmDto(
+                alarm.getId(),
+                alarm.getUserAccount().getUserId(),
                 alarm.getCreatedAt(),
                 alarm.getAlarmType(),
                 alarm.getAlarmArgs(),
