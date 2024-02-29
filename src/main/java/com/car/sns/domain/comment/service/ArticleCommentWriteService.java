@@ -1,5 +1,7 @@
 package com.car.sns.domain.comment.service;
 
+import com.car.sns.application.usecase.EmitterUseCase;
+import com.car.sns.application.usecase.alarm.AlarmDto;
 import com.car.sns.application.usecase.alarm.AlarmManagementUseCase;
 import com.car.sns.application.usecase.comment.ArticleCommentManagementUseCase;
 import com.car.sns.domain.alarm.model.AlarmArgs;
@@ -22,6 +24,7 @@ public class ArticleCommentWriteService implements ArticleCommentManagementUseCa
     private final ArticleJpaRepository articleRepository;
     private final ArticleCommentJpaRepository articleCommentRepository;
     private final AlarmManagementUseCase alarmManagementUseCase;
+    private final EmitterUseCase emitterUseCase;
 
     @Override
     public void saveArticleComment(ArticleCommentDto articleCommentDto) {
@@ -35,10 +38,11 @@ public class ArticleCommentWriteService implements ArticleCommentManagementUseCa
         } else {
 
             articleCommentRepository.save(articleComment).getId();
-            alarmManagementUseCase.alarmOccurred(NEW_COMMENT_ON_ARTICLE,
-                    AlarmArgs.of(articleComment.getUserAccount().getUserId(),
-                                article.getId()),
-                                article.getCreatedBy());
+            AlarmDto alarmDto = alarmManagementUseCase.alarmOccurred(NEW_COMMENT_ON_ARTICLE,
+                                    AlarmArgs.of(articleComment.getUserAccount().getUserId(),
+                                            article.getId()),
+                                    article.getCreatedBy());
+            emitterUseCase.send(alarmDto.toUserId(), alarmDto.alarmId());//알람을 받을 사용자
         }
     }
 

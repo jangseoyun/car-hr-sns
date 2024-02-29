@@ -26,7 +26,8 @@ public enum AppErrorCode {
     DATABASE_INSERT_FAIL            ("DB0001", HttpStatus.EXPECTATION_FAILED, "데이터베이스 등록 실패"),
 
     //서버
-    INTERNAL_SERVER_ERROR           ("SER001", HttpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+    INTERNAL_SERVER_ERROR           ("SER001", HttpStatus.INTERNAL_SERVER_ERROR, "internal server error"),
+    NOTIFICATION_CONNECT_ERROR      ("SSE001", HttpStatus.NOT_ACCEPTABLE, "sse connecting alarm occurs error");
 
     private String errorCode;
     private HttpStatus status;

@@ -1,5 +1,6 @@
 package com.car.sns.domain.alarm.service;
 
+import com.car.sns.application.usecase.alarm.AlarmDto;
 import com.car.sns.application.usecase.alarm.AlarmManagementUseCase;
 import com.car.sns.domain.alarm.model.AlarmArgs;
 import com.car.sns.domain.alarm.model.AlarmType;
@@ -24,15 +25,12 @@ public class AlarmWriteService implements AlarmManagementUseCase {
     private final AlarmJpaRepository alarmJpaRepository;
     private final UserAccountJpaRepository userAccountJpaRepository;
     @Override
-    public void alarmOccurred(AlarmType alarmType, AlarmArgs alarmArgs, String toUserId) {
-        //알람 발생 사용자 가져오기
-        UserAccount toUser;
-        try {
-            userAccountJpaRepository.findByUserId(alarmArgs.fromUserId()).orElseThrow();
-            toUser = userAccountJpaRepository.findByUserId(toUserId).orElseThrow();
-        } catch (RuntimeException e) {
+    public AlarmDto alarmOccurred(AlarmType alarmType, AlarmArgs alarmArgs, String toUserId) {
+        UserAccount toUser = userAccountJpaRepository.findByUserId(toUserId).orElseThrow(() -> {
             throw new CarHrSnsAppException(USER_NOTFOUND_ACCOUNT, USER_NOTFOUND_ACCOUNT.getMessage());
-        }
-        alarmJpaRepository.save(Alarm.of(toUser, alarmType, alarmArgs));
+        });
+
+        Alarm savedAlarm = alarmJpaRepository.save(Alarm.of(toUser, alarmType, alarmArgs));
+        return AlarmDto.from(savedAlarm);
     }
 }

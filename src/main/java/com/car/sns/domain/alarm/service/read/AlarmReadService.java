@@ -15,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AlarmReadService implements AlarmReadUseCase {
-
     private final AlarmJpaRepository alarmJpaRepository;
-
     /**
      * 특정 사용자의 알람 전체 리스트 조회
      */
