@@ -2,7 +2,7 @@ package com.car.sns.presentation.controller;
 
 import com.car.sns.application.usecase.user.UserManagementUseCase;
 import com.car.sns.application.usecase.user.UserReadUseCase;
-import com.car.sns.domain.user.model.CarAppPrincipal;
+import com.car.sns.domain.user.model.UserAccountDto;
 import com.car.sns.presentation.model.request.RegisterAccountRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,8 +71,8 @@ class UserControllerTest {
                 "memo");
     }
 
-    private CarAppPrincipal createUserAccountDto() {
-        return CarAppPrincipal.of(
+    private UserAccountDto createUserAccountDto() {
+        return UserAccountDto.of(
                 "userId",
                 "password1234",
                 "email@email.com",
