@@ -98,7 +98,7 @@ clean.doLast {
 // Heroku 설정
 jar {
     manifest {
-        attributes('Main-Class': 'com.car.sns.CarHrSnsApplication')
+        attributes('Main-Class': 'com.car.sns.CarHrApiApplication')
     }
 }
 
