@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @ConfigurationPropertiesScan
 @SpringBootApplication
-public class CarHrSnsApplication {
+public class CarHrApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CarHrSnsApplication.class, args);
+        SpringApplication.run(CarHrApiApplication.class, args);
     }
 
 }

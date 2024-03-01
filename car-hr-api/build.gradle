@@ -1,0 +1,114 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+ext {
+    springCloudVersion = "2023.0.0"
+}
+
+group = 'com.car'
+version = '1.0.0-alpha'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+def queryDslVersion = '5.0.0'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.data:spring-data-rest-hal-explorer'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    //implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // com.sun.xml.bind
+    implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
+    implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
+    // javax.xml.bind
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.3.1'
+    implementation 'com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
+    //runtimeOnly 'org.postgresql:postgresql'
+
+    // 필수
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+    implementation "com.querydsl:querydsl-core:${queryDslVersion}"
+
+    // QueryDsl 쿼리 타입 생성 (QClass 생성 시 @Entity 탐색)
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
+
+    // java.lang.NoClassDefFoundError:javax/persistence/Entity 에러 방지
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// QueryDsl 빌드 옵션 (선택)
+// QueryDsl 디렉토리 경로
+def querydslDir = "src/main/generated"
+
+// 경로 추가 >> QueryDsl 소스 코드 컴파일 시 빌드
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+// 컴파일 설정(AnnotationProcessor가 생성하는 소스코드를 해당 경로로 설정)
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+// clean실행 시 마지막 작업으로 디렉토리(QClass) 삭제 >> 충돌 방지
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+
+// Heroku 설정
+jar {
+    manifest {
+        attributes('Main-Class': 'com.car.sns.CarHrApiApplication')
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+
+// 테스트 코드를 제외한 빌드 수행
+tasks.withType(Test) {
+    enabled = true
+}
